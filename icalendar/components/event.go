@@ -72,7 +72,7 @@ type Event struct {
 	RecurrenceId *values.DateTime `ical:"recurrence_id,omitempty"`
 
 	// defines a rule or repeating pattern for recurring events, to-dos, or time zone definitions.
-	RecurrenceRules []*values.RecurrenceRule `ical:",omitempty"`
+	RecurrenceRules []*values.RecurrenceRule `ical:"RRULE,omitempty"`
 
 	// property provides the capability to associate a document object with a calendar component.
 	Attachment *values.Url `ical:"attach,omitempty"`
