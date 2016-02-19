@@ -2,12 +2,12 @@ package caldav
 
 import (
 	"fmt"
-	calentities "github.com/taviti/caldav-go/caldav/entities"
-	"github.com/taviti/caldav-go/icalendar/components"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/icalendar/values"
-	"github.com/taviti/caldav-go/webdav"
-	webentities "github.com/taviti/caldav-go/webdav/entities"
+	calentities "github.com/heindl/caldav-go/caldav/entities"
+	"github.com/heindl/caldav-go/icalendar/components"
+	"github.com/heindl/caldav-go/icalendar/properties"
+	"github.com/heindl/caldav-go/icalendar/values"
+	"github.com/heindl/caldav-go/webdav"
+	webentities "github.com/heindl/caldav-go/webdav/entities"
 	. "github.com/taviti/check"
 	"net/url"
 	"os"

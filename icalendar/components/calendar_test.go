@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/taviti/caldav-go/icalendar"
+	"github.com/heindl/caldav-go/icalendar"
 	. "github.com/taviti/check"
 	"testing"
 )

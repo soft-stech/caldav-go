@@ -2,8 +2,8 @@ package icalendar
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/heindl/caldav-go/icalendar/properties"
+	"github.com/heindl/caldav-go/utils"
 	"log"
 	"reflect"
 	"strings"
@@ -54,7 +54,7 @@ func newValue(in reflect.Value) (out reflect.Value, isArrayElement bool) {
 
 func dereferencePointerValue(v reflect.Value) reflect.Value {
 	for (v.Kind() == reflect.Interface || v.Kind() == reflect.Ptr) && v.Elem().IsValid() {
-		v = v.Elem()
+		return v.Elem()
 	}
 	return v
 }

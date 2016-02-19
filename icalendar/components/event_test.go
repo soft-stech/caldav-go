@@ -2,8 +2,8 @@ package components
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar"
-	"github.com/taviti/caldav-go/icalendar/values"
+	"github.com/heindl/caldav-go/icalendar"
+	"github.com/heindl/caldav-go/icalendar/values"
 	. "github.com/taviti/check"
 	"net/url"
 	"testing"
@@ -125,10 +125,8 @@ RRULE:FREQ=WEEKLY;BYDAY=TU
 DTSTAMP:20160202T232000Z
 ORGANIZER;CN=John Boiles:mailto:notjohn@peer.com
 UID:1aa6viotfq60eei601rk1rg2r0@google.com
-ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Fake
- Two;X-NUM-GUESTS=0:mailto:fake2@honestwork.co
-ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=John B
- oiles;X-NUM-GUESTS=0:mailto:notjohn@peer.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Fake Two;X-NUM-GUESTS=0:mailto:fake2@honestwork.co
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=John Boiles;X-NUM-GUESTS=0:mailto:notjohn@peer.com
 CREATED:20150622T180602Z
 DESCRIPTION:
 LAST-MODIFIED:20160202T232000Z
@@ -161,4 +159,88 @@ END:VEVENT`
 	err := icalendar.Unmarshal(raw, &e)
 	c.Assert(err, IsNil)
 	c.Assert(len(e.RecurrenceRules), Equals, 1)
+}
+
+func (s *EventSuite) TestUnmarshalAttendees(c *C) {
+	raw := `
+BEGIN:VEVENT
+DTSTART;TZID=America/Los_Angeles:20151106T110000
+DTEND;TZID=America/Los_Angeles:20151106T113000
+DTSTAMP:20151117T211600Z
+ORGANIZER;CN=John Boiles:mailto:john@peer.com
+UID:rtmk2f1vvoprehiu2cq654991o@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=John Boiles;X-NUM-GUESTS=0:mailto:john@peer.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Sean Chan;X-NUM-GUESTS=0:mailto:sean@peer.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Steven Chou;X-NUM-GUESTS=0:mailto:steven@peer.com
+RECURRENCE-ID;TZID=America/Los_Angeles:20151103T133000
+CREATED:20150615T205546Z
+DESCRIPTION:
+LAST-MODIFIED:20151117T211600Z
+LOCATION:
+SEQUENCE:2
+STATUS:CONFIRMED
+SUMMARY:1:1
+TRANSP:OPAQUE
+X-APPLE-TRAVEL-ADVISORY-BEHAVIOR:AUTOMATIC
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:This is an event reminder
+TRIGGER:-P0DT0H10M0S
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:This is an event reminder
+TRIGGER:-P0DT0H15M0S
+END:VALARM
+BEGIN:VALARM
+ACTION:NONE
+TRIGGER;VALUE=DATE-TIME:19760401T005545Z
+X-WR-ALARMUID:BA4450C6-B914-4BAD-857D-B9BA724A034D
+UID:BA4450C6-B914-4BAD-857D-B9BA724A034D
+ACKNOWLEDGED:20151106T193000Z
+END:VALARM
+END:VEVENT
+`
+
+	e := Event{}
+	err := icalendar.Unmarshal(raw, &e)
+	c.Assert(err, IsNil)
+	c.Assert(e.Summary, Equals, "1:1")
+	c.Assert(len(e.Attendees), Equals, 3)
+	c.Assert(e.Attendees[0].Entry.Name, Equals, "John Boiles")
+	c.Assert(e.Attendees[0].Entry.Address, Equals, "john@peer.com")
+	c.Assert(e.Attendees[1].Entry.Name, Equals, "Sean Chan")
+	c.Assert(e.Attendees[1].Entry.Address, Equals, "sean@peer.com")
+	c.Assert(e.Attendees[2].Entry.Name, Equals, "Steven Chou")
+	c.Assert(e.Attendees[2].Entry.Address, Equals, "steven@peer.com")
+}
+
+func (s *EventSuite) TestUnmarshalMultipleLines(c *C) {
+	// Event that has an ATTENDEE that spans 3 lines
+	raw := `BEGIN:VEVENT
+DTSTART;TZID=America/Los_Angeles:20150511T140000
+DTEND;TZID=America/Los_Angeles:20150511T150000
+DTSTAMP:20150511T204516Z
+ORGANIZER;CN=Fakebiz Shared:mailto:fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikm
+ aeq8@group.calendar.google.com
+UID:na9njgloe10sch3h0uootli104@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Fakebiz
+  Shared;X-NUM-GUESTS=0:mailto:fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikm
+ aeq8@group.calendar.google.com
+CREATED:20150504T173946Z
+DESCRIPTION:
+LAST-MODIFIED:20150511T204516Z
+LOCATION:Outer space
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Brand Presentation
+TRANSP:OPAQUE
+END:VEVENT`
+
+	e := Event{}
+	err := icalendar.Unmarshal(raw, &e)
+	c.Assert(err, IsNil)
+	c.Assert(len(e.Attendees), Equals, 1)
+	c.Assert(e.Attendees[0].Entry.Address, Equals, "fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikmaeq8@group.calendar.google.com")
+	c.Assert(e.Attendees[0].Entry.Name, Equals, "Fakebiz Shared")
 }

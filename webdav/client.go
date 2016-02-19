@@ -2,9 +2,9 @@ package webdav
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/http"
-	"github.com/taviti/caldav-go/utils"
-	"github.com/taviti/caldav-go/webdav/entities"
+	"github.com/heindl/caldav-go/http"
+	"github.com/heindl/caldav-go/utils"
+	"github.com/heindl/caldav-go/webdav/entities"
 	nhttp "net/http"
 )
 

@@ -2,8 +2,8 @@ package values
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/heindl/caldav-go/icalendar/properties"
+	"github.com/heindl/caldav-go/utils"
 	"log"
 	"strings"
 	"time"
@@ -11,6 +11,7 @@ import (
 
 var _ = log.Print
 
+const DateFormatString = "20060102"
 const DateTimeFormatString = "20060102T150405"
 const UTCDateTimeFormatString = "20060102T150405Z"
 
@@ -98,6 +99,9 @@ func (d *DateTime) DecodeICalValue(value string) error {
 	layout := DateTimeFormatString
 	if strings.HasSuffix(value, "Z") {
 		layout = UTCDateTimeFormatString
+		//} else if len(value) == 8 {
+		//	layout = DateFormatString
+		//}
 	}
 	var err error
 	d.t, err = time.ParseInLocation(layout, value, time.UTC)

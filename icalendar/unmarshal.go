@@ -2,8 +2,8 @@ package icalendar
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/heindl/caldav-go/icalendar/properties"
+	"github.com/heindl/caldav-go/utils"
 	"log"
 	"reflect"
 	"regexp"
@@ -43,7 +43,17 @@ func tokenizeSlice(slice []string, name ...string) (*token, error) {
 
 	for i := 0; i < size; i++ {
 
+
+
+		// Handle iCalendar's space-indented line break format
+		// See: https://www.ietf.org/rfc/rfc2445.txt section 4.1
+		// "a long line can be split between any two characters by inserting a CRLF immediately followed by a single
+		// linear white space character"
 		line := slice[i]
+		for ; i < size-1 && strings.HasPrefix(slice[i+1], " "); i++ {
+			next := slice[i+1]
+			line += next[1:len(next)]
+		}
 		prop := properties.UnmarshalProperty(line)
 
 		if prop.Name.Equals("begin") {
@@ -62,15 +72,13 @@ func tokenizeSlice(slice []string, name ...string) (*token, error) {
 				}
 			}
 		} else if existing, ok := tok.properties[prop.Name]; ok {
-			tok.properties[prop.Name] = []*properties.Property{prop}
-		} else {
 			tok.properties[prop.Name] = append(existing, prop)
+		} else {
+			tok.properties[prop.Name] = []*properties.Property{prop}
 		}
-
 	}
 
 	return tok, nil
-
 }
 
 func hydrateInterface(v reflect.Value, prop *properties.Property) (bool, error) {
@@ -188,7 +196,8 @@ func hydrateProperty(v reflect.Value, prop *properties.Property) error {
 		if !voldval.CanSet() {
 			return utils.NewError(hydrateProperty, "unable to set array value", v, nil)
 		} else {
-			voldval.Set(reflect.Append(voldval, vnewval))
+			voldval.Set(reflect.Append(voldval, vnew))
+			return nil
 		}
 	} else if vlit {
 		// for literals, set the dereferenced value
