@@ -99,9 +99,8 @@ func (d *DateTime) DecodeICalValue(value string) error {
 	layout := DateTimeFormatString
 	if strings.HasSuffix(value, "Z") {
 		layout = UTCDateTimeFormatString
-		//} else if len(value) == 8 {
-		//	layout = DateFormatString
-		//}
+	} else if len(value) == 8 {
+		layout = DateFormatString
 	}
 	var err error
 	d.t, err = time.ParseInLocation(layout, value, time.UTC)
