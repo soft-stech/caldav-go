@@ -1,10 +1,14 @@
 package values
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/heindl/caldav-go/icalendar/properties"
 	"github.com/heindl/caldav-go/utils"
+	"io/ioutil"
 	"log"
+	"path"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -124,16 +128,45 @@ func (d *DateTime) EncodeICalParams() (params properties.Params, err error) {
 func (d *DateTime) DecodeICalParams(params properties.Params) error {
 	layout := DateTimeFormatString
 	value := d.t.Format(layout)
-	if name, found := params[properties.TimeZoneIdPropertyName]; !found {
+	name, found := params[properties.TimeZoneIdPropertyName]
+	if !found {
 		return nil
-	} else if loc, err := time.LoadLocation(name); err != nil {
-		return utils.NewError(d.DecodeICalValue, "unable to parse timezone", d, err)
-	} else if t, err := time.ParseInLocation(layout, value, loc); err != nil {
+	}
+	loc, err := time.LoadLocation(name)
+	if err != nil {
+		// Attempt to get Olson's time
+		olson := getOlsonTimezone(name)
+		if olson != "" {
+			loc, err = time.LoadLocation(olson)
+			if err != nil {
+				return utils.NewError(d.DecodeICalValue, "unable to parse timezone after converting to Olson's time", d, err)
+			}
+		} else {
+			return utils.NewError(d.DecodeICalValue, "unable to parse timezone", d, err)
+		}
+	}
+	if t, err := time.ParseInLocation(layout, value, loc); err != nil {
 		return utils.NewError(d.DecodeICalValue, "unable to parse datetime value", d, err)
 	} else {
 		d.t = t
 		return nil
 	}
+}
+
+func getOlsonTimezone(windowsTime string) string {
+	_, realFilename, _, _ := runtime.Caller(1)
+	absPath := path.Join(path.Dir(realFilename), "../../timezonesmap/windows-olson.json")
+	j, err := ioutil.ReadFile(absPath)
+	if err != nil {
+		return ""
+	}
+	var timeMap map[string]string
+	if json.Unmarshal(j, &timeMap) != nil {
+		return ""
+	}
+
+	return timeMap[windowsTime]
+
 }
 
 // validates the datetime value against the iCalendar specification
