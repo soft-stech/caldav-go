@@ -150,22 +150,6 @@ func (d *DateTime) DecodeICalParams(params properties.Params) error {
 	}
 }
 
-//func getOlsonTimezone(windowsTime string) string {
-//	_, realFilename, _, _ := runtime.Caller(1)
-//	absPath := path.Join(path.Dir(realFilename), "../../timezonesmap/windows-olson.json")
-//	j, err := ioutil.ReadFile(absPath)
-//	if err != nil {
-//		return ""
-//	}
-//	var timeMap map[string]string
-//	if json.Unmarshal(j, &timeMap) != nil {
-//		return ""
-//	}
-//
-//	return timeMap[windowsTime]
-//
-//}
-
 // validates the datetime value against the iCalendar specification
 func (d *DateTime) ValidateICalValue() error {
 
