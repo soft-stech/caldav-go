@@ -2,11 +2,12 @@ package values
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/taviti/caldav-go/icalendar/properties"
+	"github.com/taviti/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -19,6 +20,8 @@ const UTCDateTimeFormatString = "20060102T150405Z"
 type DateTime struct {
 	t time.Time
 }
+
+type DateTimeFullDay DateTime
 
 type DateTimes []*DateTime
 
@@ -60,6 +63,12 @@ func NewDateTime(t time.Time) *DateTime {
 // creates a new icalendar datetime array representation
 func NewDateTimes(dates ...*DateTime) DateTimes {
 	return DateTimes(dates)
+}
+
+// creates a new icalendar datetime representation
+func NewDateTimeFullDay(t time.Time) *DateTimeFullDay {
+	datetimes := NewDateTime(t)
+	return (*DateTimeFullDay)(datetimes)
 }
 
 // creates a new icalendar datetime array representation
@@ -161,6 +170,16 @@ func (d *DateTime) String() string {
 	} else {
 		return s
 	}
+}
+
+// encodes the datetime for full day value for the iCalendar specification
+func (d *DateTimeFullDay) EncodeICalValue() (string, error) {
+	val := d.t.Format(DateFormatString)
+	loc := d.t.Location()
+	if loc == time.UTC {
+		val = fmt.Sprintf("%sZ", val)
+	}
+	return val, nil
 }
 
 // encodes a list of datetime values for the iCalendar specification
