@@ -2,11 +2,12 @@ package values
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/rsniezynski/caldav-go/icalendar/properties"
+	"github.com/rsniezynski/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -140,8 +141,7 @@ func (d *DateTime) DecodeICalParams(params properties.Params) error {
 func (d *DateTime) ValidateICalValue() error {
 
 	loc := d.t.Location()
-
-	if loc == time.Local {
+	if loc.String() == "Local" {
 		msg := "DateTime location may not Local, please use UTC or explicit Location"
 		return utils.NewError(d.ValidateICalValue, msg, d, nil)
 	}

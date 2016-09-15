@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/taviti/caldav-go/icalendar"
+	"github.com/rsniezynski/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
 	"testing"
 	"time"

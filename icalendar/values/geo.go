@@ -2,7 +2,7 @@ package values
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/rsniezynski/caldav-go/utils"
 	"log"
 	"strconv"
 	"strings"
