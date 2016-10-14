@@ -127,7 +127,7 @@ func (d *DateTime) DecodeICalParams(params properties.Params) error {
 	value := d.t.Format(layout)
 	if name, found := params[properties.TimeZoneIdPropertyName]; !found {
 		return nil
-	} else if loc, err := time.LoadLocation(name); err != nil {
+	} else if loc, err := loadLocation(name); err != nil {
 		return utils.NewError(d.DecodeICalValue, "unable to parse timezone", d, err)
 	} else if t, err := time.ParseInLocation(layout, value, loc); err != nil {
 		return utils.NewError(d.DecodeICalValue, "unable to parse datetime value", d, err)
@@ -135,6 +135,14 @@ func (d *DateTime) DecodeICalParams(params properties.Params) error {
 		d.t = t
 		return nil
 	}
+}
+
+func loadLocation(name string) (*time.Location, error) {
+	loc, err := time.LoadLocation(name)
+	if err != nil {
+		return time.UTC, nil
+	}
+	return loc, nil
 }
 
 // validates the datetime value against the iCalendar specification
