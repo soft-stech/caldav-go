@@ -2,11 +2,12 @@ package values
 
 import (
 	"fmt"
-	"github.com/rsniezynski/caldav-go/icalendar/properties"
-	"github.com/rsniezynski/caldav-go/utils"
 	"log"
 	"net/mail"
 	"strings"
+
+	"github.com/rsniezynski/caldav-go/icalendar/properties"
+	"github.com/rsniezynski/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -21,7 +22,8 @@ var _ = log.Print
 // parameters may also be specified on this property. If the LANGUAGE property parameter is specified, the identified
 // language applies to the CN parameter value.
 type Contact struct {
-	Entry mail.Address
+	Entry  mail.Address
+	Status string
 }
 
 type AttendeeContact Contact
@@ -74,6 +76,9 @@ func (c *Contact) DecodeICalValue(value string) error {
 func (c *Contact) DecodeICalParams(params properties.Params) error {
 	if name, found := params[properties.CanonicalNameParameterName]; found {
 		c.Entry.Name = name
+	}
+	if partstat, found := params[properties.ParticipationStatusName]; found {
+		c.Status = partstat
 	}
 	return nil
 }

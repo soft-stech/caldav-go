@@ -22,6 +22,7 @@ const (
 	TimeZoneIdPropertyName                    = "TZID"
 	ValuePropertyName                         = "VALUE"
 	AlternateRepresentationName               = "ALTREP"
+	ParticipationStatusName                   = "PARTSTAT"
 )
 
 type Params map[ParameterName]string
