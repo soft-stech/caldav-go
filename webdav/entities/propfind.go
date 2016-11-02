@@ -18,3 +18,20 @@ type AllProp struct {
 func NewAllPropsFind() *Propfind {
 	return &Propfind{AllProp: new(AllProp)}
 }
+
+// method for current user principal search
+func NewCurrentUserPrincipalPropFind() *Propfind {
+	return &Propfind{
+		Props: []*Prop{{
+				CurrentUserPrincipal: &Principal{},
+		}},
+	}
+}
+
+func NewDisplayNamePropFind() *Propfind {
+	return &Propfind{
+		Props: []*Prop{{
+			DisplayName: ".",
+		}},
+	}
+}

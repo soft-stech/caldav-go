@@ -6,12 +6,13 @@ import (
 
 // a property of a resource
 type Prop struct {
-	XMLName        xml.Name      `xml:"DAV: prop"`
-	GetContentType string        `xml:"getcontenttype,omitempty"`
-	DisplayName    string        `xml:"displayname,omitempty"`
-	ResourceType   *ResourceType `xml:",omitempty"`
-	CTag           string        `xml:"http://calendarserver.org/ns/ getctag,omitempty"`
-	ETag           string        `xml:"http://calendarserver.org/ns/ getetag,omitempty"`
+	XMLName              xml.Name      `xml:"DAV: prop"`
+	GetContentType       string        `xml:"getcontenttype,omitempty"`
+	DisplayName          string        `xml:"displayname,omitempty"`
+	ResourceType         *ResourceType `xml:",omitempty"`
+	CurrentUserPrincipal *Principal    `xml:"current-user-principal,omitempty"`
+	CTag                 string        `xml:"http://calendarserver.org/ns/ getctag,omitempty"`
+	ETag                 string        `xml:"http://calendarserver.org/ns/ getetag,omitempty"`
 }
 
 // the type of a resource
@@ -29,4 +30,8 @@ type ResourceTypeCalendar struct {
 // A collection resource type
 type ResourceTypeCollection struct {
 	XMLName xml.Name `xml:"collection"`
+}
+
+type Principal struct {
+	Href string `xml:"href,omitempty"`
 }
