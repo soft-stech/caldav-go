@@ -29,6 +29,10 @@ func (c *Client) Server() *Server {
 	return c.server
 }
 
+func (c *Client) SetServer(s *Server) {
+	c.server = s
+}
+
 // executes an HTTP request
 func (c *Client) Do(req *Request) (*Response, error) {
 	for key, value := range c.requestHeaders {
