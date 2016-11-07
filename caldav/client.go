@@ -114,6 +114,27 @@ func (c *Client) PutCalendars(path string, calendars ...*components.Calendar) er
 	return nil
 }
 
+func (c *Client) DeleteEvent(path string) error {
+	req, err := c.Server().NewRequest("DELETE", path)
+	if err != nil {
+		return utils.NewError(c.PutCalendars, "unable to encode request", c, err)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return utils.NewError(c.PutCalendars, "unable to execute request", c, err)
+	}
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
+		err := new(entities.Error)
+		resp.WebDAV().Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.PutCalendars, msg, c, err)
+	}
+
+	return nil
+}
+
 // attempts to fetch an event on the remote CalDAV server
 func (c *Client) GetEvents(path string) ([]*components.Event, error) {
 	cal := new(components.Calendar)
