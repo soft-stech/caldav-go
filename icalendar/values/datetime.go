@@ -115,7 +115,7 @@ func (d *DateTime) DecodeICalValue(value string) error {
 func (d *DateTime) EncodeICalParams() (params properties.Params, err error) {
 	loc := d.t.Location()
 	if loc != time.UTC {
-		params = properties.Params{properties.TimeZoneIdPropertyName: loc.String()}
+		params = properties.Params{{properties.TimeZoneIdPropertyName, loc.String()}}
 	}
 	return
 }
@@ -124,16 +124,20 @@ func (d *DateTime) EncodeICalParams() (params properties.Params, err error) {
 func (d *DateTime) DecodeICalParams(params properties.Params) error {
 	layout := DateTimeFormatString
 	value := d.t.Format(layout)
-	if name, found := params[properties.TimeZoneIdPropertyName]; !found {
-		return nil
-	} else if loc, err := time.LoadLocation(name); err != nil {
-		return utils.NewError(d.DecodeICalValue, "unable to parse timezone", d, err)
-	} else if t, err := time.ParseInLocation(layout, value, loc); err != nil {
-		return utils.NewError(d.DecodeICalValue, "unable to parse datetime value", d, err)
-	} else {
-		d.t = t
-		return nil
+	for _, param := range params {
+		if param.Name == properties.TimeZoneIdPropertyName {
+			if loc, err := time.LoadLocation(param.Value); err != nil {
+				return utils.NewError(d.DecodeICalValue, "unable to parse timezone", d, err)
+			} else if t, err := time.ParseInLocation(layout, value, loc); err != nil {
+				return utils.NewError(d.DecodeICalValue, "unable to parse datetime value", d, err)
+			} else {
+				d.t = t
+				return nil
+			}
+		}
 	}
+
+	return nil
 }
 
 // validates the datetime value against the iCalendar specification

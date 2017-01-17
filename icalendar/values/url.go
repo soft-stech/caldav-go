@@ -18,9 +18,10 @@ func (u *Url) EncodeICalValue() (string, error) {
 
 // encodes the url params for the iCalendar specification
 func (u *Url) EncodeICalParams() (params properties.Params, err error) {
-	params = properties.Params{
-		properties.ValuePropertyName: "URI",
-	}
+	params = properties.Params{{
+		properties.ValuePropertyName,
+		"URI",
+	}}
 	return
 }
 

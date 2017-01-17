@@ -94,9 +94,9 @@ func MarshalProperty(p *Property) string {
 	name := strings.ToUpper(propNameSanitizer.Replace(string(p.Name)))
 	value := propValueSanitizer.Replace(p.Value)
 	keys := []string{name}
-	for name, value := range p.Params {
-		name = ParameterName(strings.ToUpper(propNameSanitizer.Replace(string(name))))
-		value = propValueSanitizer.Replace(value)
+	for _, param := range p.Params {
+		name := ParameterName(strings.ToUpper(propNameSanitizer.Replace(string(param.Name))))
+		value := propValueSanitizer.Replace(param.Value)
 		if strings.ContainsAny(value, " :") {
 			keys = append(keys, fmt.Sprintf("%s=\"%s\"", name, value))
 		} else {
@@ -152,7 +152,7 @@ func UnmarshalProperty(line string) *Property {
 	}
 	npp := strings.Split(nvp[0], ";")
 	if len(npp) > 1 {
-		prop.Params = make(map[ParameterName]string, 0)
+		prop.Params = make(Params, 0)
 		for i := 1; i < len(npp); i++ {
 			var key, value string
 			kvp := strings.Split(npp[i], "=")
@@ -163,7 +163,10 @@ func UnmarshalProperty(line string) *Property {
 				value = propValueDesanitizer.Replace(value)
 				value = strings.Trim(value, "\"")
 			}
-			prop.Params[ParameterName(key)] = value
+			prop.Params = append(prop.Params, Param{
+				Name: ParameterName(key),
+				Value: value,
+			})
 		}
 	}
 	prop.Name = PropertyName(strings.TrimSpace(npp[0]))

@@ -47,21 +47,28 @@ func (l *Location) DecodeICalValue(value string) error {
 // encodes the location params for the iCalendar specification
 func (l *Location) EncodeICalParams() (params properties.Params, err error) {
 	if l.altrep != nil {
-		params = properties.Params{properties.AlternateRepresentationName: l.altrep.String()}
+		params = properties.Params{{
+			properties.AlternateRepresentationName,
+			l.altrep.String(),
+		}}
 	}
 	return
 }
 
 // decodes the location params from the iCalendar specification
 func (l *Location) DecodeICalParams(params properties.Params) error {
-	if rep, found := params[properties.AlternateRepresentationName]; !found {
-		return nil
-	} else if altrep, err := url.Parse(rep); err != nil {
-		return utils.NewError(l.DecodeICalValue, "unable to parse alternate representation", l, err)
-	} else {
-		l.altrep = altrep
-		return nil
+	for _, param := range params {
+		if param.Name == properties.AlternateRepresentationName {
+			if altrep, err := url.Parse(param.Value); err != nil {
+				return utils.NewError(l.DecodeICalValue, "unable to parse alternate representation", l, err)
+			} else {
+				l.altrep = altrep
+				return nil
+			}
+		}
 	}
+
+	return nil
 }
 
 // validates the location against the iCalendar specification

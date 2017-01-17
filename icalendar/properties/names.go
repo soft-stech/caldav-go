@@ -24,7 +24,12 @@ const (
 	AlternateRepresentationName               = "ALTREP"
 )
 
-type Params map[ParameterName]string
+type Param struct {
+	Name ParameterName
+	Value string
+}
+
+type Params []Param
 
 func (p PropertyName) Equals(test string) bool {
 	return strings.EqualFold(string(p), test)
