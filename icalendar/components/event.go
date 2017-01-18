@@ -78,7 +78,7 @@ type Event struct {
 	Attachment *values.Url `ical:"attach,omitempty"`
 
 	// defines an "Attendee" within a calendar component.
-	Attendees []*values.AttendeeContact `ical:",omitempty"`
+	Attendees []*values.AttendeeContact `ical:"attendee,omitempty"`
 
 	// defines the categories for a calendar component.
 	Categories *values.CSV `ical:",omitempty"`
