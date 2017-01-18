@@ -1,9 +1,9 @@
 package values
 
 import (
-	"testing"
 	"github.com/jkrecek/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
+	"testing"
 )
 
 type EmailSuite struct{}

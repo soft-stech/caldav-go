@@ -13,6 +13,7 @@ const (
 	RecurrenceDateTimesPropertyName              = "RDATE"
 	RecurrenceRulePropertyName                   = "RRULE"
 	LocationPropertyName                         = "LOCATION"
+	EmailPropertyName                            = "EMAIL"
 )
 
 type ParameterName string
@@ -25,7 +26,7 @@ const (
 )
 
 type Param struct {
-	Name ParameterName
+	Name  ParameterName
 	Value string
 }
 

@@ -11,8 +11,6 @@ type Email struct {
 
 const (
 	ParameterType properties.ParameterName = "TYPE"
-
-	Emails	properties.PropertyName = "EMAIL"
 )
 
 func (e *Email) ValidateICalValue() error {
@@ -50,6 +48,6 @@ func (e *Email) DecodeICalValue(value string) error {
 }
 
 func (e *Email) EncodeICalName() (properties.PropertyName, error) {
-	return Emails, nil
+	return properties.EmailPropertyName, nil
 }
 

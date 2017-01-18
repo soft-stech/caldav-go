@@ -128,6 +128,9 @@ UID:na9njgloe10sch3h0uootli104@google.com
 ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Fakebiz
   Shared;X-NUM-GUESTS=0:mailto:fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikm
  aeq8@group.calendar.google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Fakebiz
+  Shared;X-NUM-GUESTS=0:mailto:fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikm
+ aeq82@group.calendar.google.com
 CREATED:20150504T173946Z
 DESCRIPTION:
 LAST-MODIFIED:20150511T204516Z
