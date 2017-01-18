@@ -9,10 +9,10 @@ type Card struct {
 
 	ProductId string `ical:"prodid,-//jkrecek/caldav-go//NONSGML v1.0.0//EN"`
 
-	Name string `ical:"n,omitempty"`
+	Name *values.ContactName `ical:"n,omitempty"`
 
 	DisplayName string `ical:"fn,omitempty"`
 
-	Emails []*values.Email `ical:",omitempty"`
+	Emails []*values.Email `ical:"email,omitempty"`
 
 }

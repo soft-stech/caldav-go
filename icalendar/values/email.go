@@ -7,10 +7,13 @@ import (
 type Email struct {
 	Mail string
 	Types []string
+	IsPreferred bool
 }
 
 const (
 	ParameterType properties.ParameterName = "TYPE"
+
+	preferredTypeValue = "pref"
 )
 
 func (e *Email) ValidateICalValue() error {
@@ -25,14 +28,25 @@ func (e *Email) EncodeICalParams() (properties.Params, error) {
 			Value: str,
 		}
 	}
+
+	if e.IsPreferred {
+		params = append(params, properties.Param{
+			Name: ParameterType,
+			Value: preferredTypeValue,
+		})
+	}
+
 	return params, nil
 }
 
 func (e *Email) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
 		if param.Name == ParameterType {
-			e.Types = append(e.Types, param.Value)
-			break
+			if param.Value == preferredTypeValue {
+				e.IsPreferred = true
+			} else {
+				e.Types = append(e.Types, param.Value)
+			}
 		}
 	}
 	return nil

@@ -14,6 +14,7 @@ const (
 	RecurrenceRulePropertyName                   = "RRULE"
 	LocationPropertyName                         = "LOCATION"
 	EmailPropertyName                            = "EMAIL"
+	NamePropertyName                             = "N"
 )
 
 type ParameterName string
