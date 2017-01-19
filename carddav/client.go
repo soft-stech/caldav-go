@@ -37,24 +37,32 @@ func NewDefaultClient(server *Server) *Client {
 	return NewClient(server, http.DefaultClient)
 }
 
+// executes a CardDAV request
+func (c *Client) Do(req *Request) (*Response, error) {
+	if resp, err := c.WebDAV().Do((*webdav.Request)(req)); err != nil {
+		return nil, utils.NewError(c.Do, "unable to execute CardDAV request", c, err)
+	} else {
+		return NewResponse(resp), nil
+	}
+}
 
-// attempts to fetch an event on the remote CalDAV server
-func (c *Client) QueryContacts(path string, query *cont.ContactQuery) (events []*components.Card, oerr error) {
+// attempts to fetch an cards on the remote CalDAV server
+func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*components.Card, oerr error) {
 	ms := new(cont.Multistatus)
 	if req, err := c.Server().WebDAV().NewRequest("REPORT", path, query); err != nil {
-		oerr = utils.NewError(c.QueryContacts, "unable to create request", c, err)
+		oerr = utils.NewError(c.QueryCards, "unable to create request", c, err)
 	} else if resp, err := c.WebDAV().Do(req); err != nil {
-		oerr = utils.NewError(c.QueryContacts, "unable to execute request", c, err)
+		oerr = utils.NewError(c.QueryCards, "unable to execute request", c, err)
 	} else if resp.StatusCode == http.StatusNotFound {
 		return // no events if not found
 	} else if resp.StatusCode != webdav.StatusMulti {
 		err := new(entities.Error)
 		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
 		resp.Decode(err)
-		oerr = utils.NewError(c.QueryContacts, msg, c, err)
+		oerr = utils.NewError(c.QueryCards, msg, c, err)
 	} else if err := resp.Decode(ms); err != nil {
 		msg := "unable to decode response"
-		oerr = utils.NewError(c.QueryContacts, msg, c, err)
+		oerr = utils.NewError(c.QueryCards, msg, c, err)
 	} else {
 		for i, r := range ms.Responses {
 			for j, p := range r.PropStats {
@@ -62,7 +70,7 @@ func (c *Client) QueryContacts(path string, query *cont.ContactQuery) (events []
 					continue
 				} else if contact, err := p.Prop.AddressData.Contact(); err != nil {
 					msg := fmt.Sprintf("unable to decode property %d of response %d", j, i)
-					oerr = utils.NewError(c.QueryContacts, msg, c, err)
+					oerr = utils.NewError(c.QueryCards, msg, c, err)
 					return
 				} else {
 					events = append(events, contact)
@@ -71,4 +79,40 @@ func (c *Client) QueryContacts(path string, query *cont.ContactQuery) (events []
 		}
 	}
 	return
+}
+
+// creates or updates one or more cards on the remote CalDAV server
+func (c *Client) PutCards(path string, cards ...*components.Card) error {
+	if req, err := c.Server().NewRequest("PUT", path, cards); err != nil {
+		return utils.NewError(c.PutCards, "unable to encode request", c, err)
+	} else if resp, err := c.Do(req); err != nil {
+		return utils.NewError(c.PutCards, "unable to execute request", c, err)
+	} else if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
+		err := new(entities.Error)
+		resp.WebDAV().Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.PutCards, msg, c, err)
+	}
+	return nil
+}
+
+func (c *Client) DeleteCard(path string) error {
+	req, err := c.Server().NewRequest("DELETE", path)
+	if err != nil {
+		return utils.NewError(c.DeleteCard, "unable to encode request", c, err)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return utils.NewError(c.DeleteCard, "unable to execute request", c, err)
+	}
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
+		err := new(entities.Error)
+		resp.WebDAV().Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.DeleteCard, msg, c, err)
+	}
+
+	return nil
 }

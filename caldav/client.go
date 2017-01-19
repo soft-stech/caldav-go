@@ -117,19 +117,19 @@ func (c *Client) PutCalendars(path string, calendars ...*components.Calendar) er
 func (c *Client) DeleteEvent(path string) error {
 	req, err := c.Server().NewRequest("DELETE", path)
 	if err != nil {
-		return utils.NewError(c.PutCalendars, "unable to encode request", c, err)
+		return utils.NewError(c.DeleteEvent, "unable to encode request", c, err)
 	}
 
 	resp, err := c.Do(req)
 	if err != nil {
-		return utils.NewError(c.PutCalendars, "unable to execute request", c, err)
+		return utils.NewError(c.DeleteEvent, "unable to execute request", c, err)
 	}
 
 	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
 		err := new(entities.Error)
 		resp.WebDAV().Decode(err)
 		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
-		return utils.NewError(c.PutCalendars, msg, c, err)
+		return utils.NewError(c.DeleteEvent, msg, c, err)
 	}
 
 	return nil
