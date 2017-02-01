@@ -26,4 +26,3 @@ func (s *Server) WebDAV() *webdav.Server {
 func (s *Server) NewRequest(method string, path string, icaldata ...interface{}) (*Request, error) {
 	return NewRequest(method, s.WebDAV().Http().AbsUrlStr(path), icaldata...)
 }
-

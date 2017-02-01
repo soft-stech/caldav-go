@@ -23,7 +23,7 @@ func NewAllPropsFind() *Propfind {
 func NewCurrentUserPrincipalPropFind() *Propfind {
 	return &Propfind{
 		Props: []*Prop{{
-				CurrentUserPrincipal: &Principal{},
+			CurrentUserPrincipal: &Principal{},
 		}},
 	}
 }

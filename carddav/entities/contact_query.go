@@ -6,8 +6,8 @@ import (
 
 // a CalDAV calendar query object
 type ContactQuery struct {
-	XMLName xml.Name          `xml:"urn:ietf:params:xml:ns:carddav addressbook-query"`
-	Prop    *Prop             `xml:",omitempty"`
+	XMLName xml.Name `xml:"urn:ietf:params:xml:ns:carddav addressbook-query"`
+	Prop    *Prop    `xml:",omitempty"`
 	//Filter  *Filter           `xml:",omitempty"`
 }
 
@@ -31,7 +31,7 @@ func NewContactQueryWithProps(props ...string) *ContactQuery {
 func NewDefaultContactQuery() *ContactQuery {
 	return &ContactQuery{
 		Prop: &Prop{
-			GetETag: new(GetETag),
+			GetETag:     new(GetETag),
 			AddressData: new(AddressData),
 		},
 	}

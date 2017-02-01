@@ -164,7 +164,7 @@ func UnmarshalProperty(line string) *Property {
 				value = strings.Trim(value, "\"")
 			}
 			prop.Params = append(prop.Params, Param{
-				Name: ParameterName(key),
+				Name:  ParameterName(key),
 				Value: value,
 			})
 		}

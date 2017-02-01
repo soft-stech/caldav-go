@@ -11,8 +11,11 @@ type Card struct {
 
 	Name *values.ContactName `ical:"n,omitempty"`
 
+	Organization *values.Organization `ical:"org,omitempty"`
+
 	DisplayName string `ical:"fn,omitempty"`
 
-	Emails []*values.Email `ical:"email,omitempty"`
+	Phones []*values.Phone `ical:"tel,omitempty"`
 
+	Emails []*values.Email `ical:"email,omitempty"`
 }

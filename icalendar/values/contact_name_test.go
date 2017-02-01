@@ -14,11 +14,11 @@ func TestContactName(t *testing.T) { TestingT(t) }
 
 func (s *ContactNameSuite) TestMarshalName(c *C) {
 	n := &ContactName{
-		FirstName: "Frank",
-		LastName: "Doe",
+		FirstName:  "Frank",
+		LastName:   "Doe",
 		MiddleName: "Francis",
-		Prefix: "Mr.",
-		Suffix: "jr.",
+		Prefix:     "Mr.",
+		Suffix:     "jr.",
 	}
 
 	enc, err := icalendar.Marshal(n)

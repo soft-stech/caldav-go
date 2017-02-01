@@ -1,19 +1,18 @@
 package entities
 
 import (
-	"testing"
 	"encoding/xml"
 	. "gopkg.in/check.v1"
+	"testing"
 )
 
-
-type ContactQuerySuite struct {}
+type ContactQuerySuite struct{}
 
 var _ = Suite(new(ContactQuerySuite))
 
 func TestContactQuery(t *testing.T) { TestingT(t) }
 
-func (s* ContactQuerySuite) TestNewEventRangeQuery(c *C) {
+func (s *ContactQuerySuite) TestNewEventRangeQuery(c *C) {
 	rq := NewContactQueryWithProps("VERSION", "UID")
 	bts, err := xml.Marshal(rq)
 	c.Assert(err, IsNil)

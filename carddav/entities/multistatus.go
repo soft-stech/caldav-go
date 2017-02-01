@@ -21,4 +21,3 @@ type Multistatus struct {
 	XMLName   xml.Name    `xml:"DAV: multistatus"`
 	Responses []*Response `xml:"response,omitempty"`
 }
-

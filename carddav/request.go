@@ -54,4 +54,3 @@ func icalToReadCloser(icaldata ...interface{}) (io.ReadCloser, error) {
 		return nil, nil
 	}
 }
-

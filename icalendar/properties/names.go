@@ -1,6 +1,8 @@
 package properties
 
-import "strings"
+import (
+	"strings"
+)
 
 type PropertyName string
 
@@ -14,7 +16,10 @@ const (
 	RecurrenceRulePropertyName                   = "RRULE"
 	LocationPropertyName                         = "LOCATION"
 	EmailPropertyName                            = "EMAIL"
+	PhonePropertyName                            = "TEL"
 	NamePropertyName                             = "N"
+	OrganizationPropertyName                     = "ORG"
+	ParameterType                                = "TYPE"
 )
 
 type ParameterName string

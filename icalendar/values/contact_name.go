@@ -2,9 +2,9 @@ package values
 
 import (
 	"fmt"
-	"strings"
-	"github.com/jkrecek/caldav-go/utils"
 	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
+	"strings"
 )
 
 type ContactName struct {
@@ -13,11 +13,11 @@ type ContactName struct {
 
 func NewContactName(firstName, lastName, middleName, prefix, suffix string) *ContactName {
 	return &ContactName{
-		FirstName: firstName,
-		LastName: lastName,
+		FirstName:  firstName,
+		LastName:   lastName,
 		MiddleName: middleName,
-		Prefix: prefix,
-		Suffix: suffix,
+		Prefix:     prefix,
+		Suffix:     suffix,
 	}
 }
 

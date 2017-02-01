@@ -1,6 +1,5 @@
 package carddav
 
-
 import (
 	"github.com/jkrecek/caldav-go/icalendar"
 	"github.com/jkrecek/caldav-go/utils"
@@ -39,4 +38,3 @@ func (r *Response) Decode(into interface{}) error {
 func NewResponse(response *webdav.Response) *Response {
 	return (*Response)(response)
 }
-
