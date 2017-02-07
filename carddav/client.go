@@ -81,7 +81,26 @@ func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*co
 	return
 }
 
-// creates or updates one or more cards on the remote CalDAV server
+// attempts to fetch an event on the remote CardDAV server
+func (c *Client) GetCard(path string) (*components.Card, error) {
+	var crd components.Card
+	if req, err := c.Server().NewRequest("GET", path); err != nil {
+		return nil, utils.NewError(c.GetCard, "unable to create request", c, err)
+	} else if resp, err := c.Do(req); err != nil {
+		return nil, utils.NewError(c.GetCard, "unable to execute request", c, err)
+	} else if resp.StatusCode != http.StatusOK {
+		err := new(entities.Error)
+		resp.WebDAV().Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return nil, utils.NewError(c.GetCard, msg, c, err)
+	} else if err := resp.Decode(&crd); err != nil {
+		return nil, utils.NewError(c.GetCard, "unable to decode response", c, err)
+	} else {
+		return &crd, nil
+	}
+}
+
+// creates or updates one or more cards on the remote CardDAV server
 func (c *Client) PutCards(path string, cards ...*components.Card) error {
 	if req, err := c.Server().NewRequest("PUT", path, cards); err != nil {
 		return utils.NewError(c.PutCards, "unable to encode request", c, err)
