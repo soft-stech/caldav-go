@@ -68,12 +68,12 @@ func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*co
 			for j, p := range r.PropStats {
 				if p.Prop == nil || p.Prop.AddressData == nil {
 					continue
-				} else if contact, err := p.Prop.AddressData.Contact(); err != nil {
+				} else if card, err := p.Prop.AddressData.Card(); err != nil {
 					msg := fmt.Sprintf("unable to decode property %d of response %d", j, i)
 					oerr = utils.NewError(c.QueryCards, msg, c, err)
 					return
 				} else {
-					events = append(events, contact)
+					events = append(events, card)
 				}
 			}
 		}

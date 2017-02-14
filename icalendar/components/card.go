@@ -1,6 +1,9 @@
 package components
 
-import "github.com/jkrecek/caldav-go/icalendar/values"
+import (
+	"github.com/jkrecek/caldav-go/icalendar/values"
+	"strings"
+)
 
 type Card struct {
 	Version string `ical:",3.0"`
@@ -15,7 +18,13 @@ type Card struct {
 
 	DisplayName string `ical:"fn,omitempty"`
 
+	AddressBookKind string `ical:"x_addressbookserver_kind,omitempty"`
+
 	Phones []*values.Phone `ical:"tel,omitempty"`
 
 	Emails []*values.Email `ical:"email,omitempty"`
+}
+
+func (c Card) IsGroup() bool {
+	return strings.EqualFold(c.AddressBookKind, "group")
 }

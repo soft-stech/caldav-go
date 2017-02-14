@@ -3,7 +3,6 @@ package values
 import (
 	"fmt"
 	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"strings"
 )
 
@@ -48,16 +47,26 @@ func (c *ContactName) EncodeICalValue() (string, error) {
 
 func (c *ContactName) DecodeICalValue(value string) error {
 	parts := strings.Split(value, ";")
-	if len(parts) != 5 {
-		msg := fmt.Sprintf("unable to proccess N field %s", value)
-		return utils.NewError(c.DecodeICalValue, msg, c, nil)
+
+	if len(parts) > 0 {
+		c.LastName = parts[0]
 	}
 
-	c.LastName = parts[0]
-	c.FirstName = parts[1]
-	c.MiddleName = parts[2]
-	c.Prefix = parts[3]
-	c.Suffix = parts[4]
+	if len(parts) > 1 {
+		c.FirstName = parts[1]
+	}
+
+	if len(parts) > 2 {
+		c.MiddleName = parts[2]
+	}
+
+	if len(parts) > 3 {
+		c.Prefix = parts[3]
+	}
+
+	if len(parts) > 4 {
+		c.Suffix = parts[4]
+	}
 
 	return nil
 }

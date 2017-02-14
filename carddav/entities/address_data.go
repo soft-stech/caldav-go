@@ -14,14 +14,17 @@ type AddressData struct {
 	Content string   `xml:",chardata"`
 }
 
-func (c *AddressData) Contact() (*components.Card, error) {
-	cal := new(components.Card)
-	if content := strings.TrimSpace(c.Content); content == "" {
-		return nil, utils.NewError(c.Contact, "no calendar data to decode", c, nil)
-		//} else if err := error(nil); err != nil {
-	} else if err := icalendar.Unmarshal(content, cal); err != nil {
-		return nil, utils.NewError(c.Contact, "decoding calendar data failed", c, err)
-	} else {
-		return cal, nil
+func (c *AddressData) Card() (*components.Card, error) {
+	content := strings.TrimSpace(c.Content)
+	if content == "" {
+		return nil, utils.NewError(c.Card, "no calendar data to decode", c, nil)
 	}
+
+	cal := new(components.Card)
+	err := icalendar.Unmarshal(content, cal)
+	if err != nil {
+		return nil, utils.NewError(c.Card, "decoding calendar data failed", c, err)
+	}
+
+	return cal, nil
 }

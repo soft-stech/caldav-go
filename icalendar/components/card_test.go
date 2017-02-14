@@ -8,6 +8,17 @@ import (
 	"testing"
 )
 
+const (
+	exampleGroupRaw = `BEGIN:VCARD
+VERSION:3.0
+X-ADDRESSBOOKSERVER-KIND:group
+PRODID:-//Apple Inc.//iOS 10.0.1//EN
+N:IMMOMIG
+FN:IMMOMIG
+UID:D7C763B7-39C2-4330-A0A7-CAD859F8C297
+END:VCARD`
+)
+
 type CardSuite struct{}
 
 var _ = Suite(new(CardSuite))
@@ -70,4 +81,11 @@ func NewCard() Card {
 			values.NewEmail("frank.doo@example.com", false, "WORK", "INTERNET"),
 		},
 	}
+}
+
+func (s *CardSuite) TestUnmarshalGroup(c *C) {
+	card := Card{}
+	err := icalendar.Unmarshal(exampleGroupRaw, &card)
+	c.Assert(err, IsNil)
+	c.Assert(card.IsGroup(), Equals, true)
 }
