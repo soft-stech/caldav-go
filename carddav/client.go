@@ -47,7 +47,7 @@ func (c *Client) Do(req *Request) (*Response, error) {
 }
 
 // attempts to fetch an cards on the remote CalDAV server
-func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*components.Card, oerr error) {
+func (c *Client) QueryCards(path string, query *cont.ContactQuery) (contacts []*components.ContactCard, oerr error) {
 	ms := new(cont.Multistatus)
 	if req, err := c.Server().WebDAV().NewRequest("REPORT", path, query); err != nil {
 		oerr = utils.NewError(c.QueryCards, "unable to create request", c, err)
@@ -73,7 +73,7 @@ func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*co
 					oerr = utils.NewError(c.QueryCards, msg, c, err)
 					return
 				} else {
-					events = append(events, card)
+					contacts = append(contacts, &components.ContactCard{Card: *card, Href: r.Href})
 				}
 			}
 		}
@@ -82,7 +82,7 @@ func (c *Client) QueryCards(path string, query *cont.ContactQuery) (events []*co
 }
 
 // attempts to fetch an event on the remote CardDAV server
-func (c *Client) GetCard(path string) (*components.Card, error) {
+func (c *Client) GetCard(path string) (*components.ContactCard, error) {
 	var crd components.Card
 	if req, err := c.Server().NewRequest("GET", path); err != nil {
 		return nil, utils.NewError(c.GetCard, "unable to create request", c, err)
@@ -96,7 +96,12 @@ func (c *Client) GetCard(path string) (*components.Card, error) {
 	} else if err := resp.Decode(&crd); err != nil {
 		return nil, utils.NewError(c.GetCard, "unable to decode response", c, err)
 	} else {
-		return &crd, nil
+		contactCard := &components.ContactCard{
+			Card: crd,
+			Href: path,
+		}
+
+		return contactCard, nil
 	}
 }
 
