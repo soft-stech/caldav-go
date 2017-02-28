@@ -2,14 +2,15 @@ package caldav
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"strings"
+
 	cent "github.com/jkrecek/caldav-go/caldav/entities"
 	"github.com/jkrecek/caldav-go/icalendar/components"
 	"github.com/jkrecek/caldav-go/utils"
 	"github.com/jkrecek/caldav-go/webdav"
 	"github.com/jkrecek/caldav-go/webdav/entities"
-	"log"
-	"net/http"
-	"strings"
 )
 
 var _ = log.Print
