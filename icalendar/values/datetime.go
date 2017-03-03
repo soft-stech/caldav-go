@@ -2,11 +2,12 @@ package values
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -17,7 +18,8 @@ const UTCDateTimeFormatString = "20060102T150405Z"
 
 // a representation of a date and time for iCalendar
 type DateTime struct {
-	t time.Time
+	t        time.Time
+	fullTime bool
 }
 
 type DateTimes []*DateTime
@@ -54,7 +56,10 @@ type RecurrenceDateTimes DateTimes
 
 // creates a new icalendar datetime representation
 func NewDateTime(t time.Time) *DateTime {
-	return &DateTime{t: t.Truncate(time.Second)}
+	return &DateTime{t: t.Truncate(time.Second), fullTime: true}
+}
+func NewDateTimeDate(t time.Time) *DateTime {
+	return &DateTime{t: t.Truncate(time.Second), fullTime: false}
 }
 
 // creates a new icalendar datetime array representation
@@ -86,21 +91,29 @@ func (d *DateTime) NativeTime() time.Time {
 
 // encodes the datetime value for the iCalendar specification
 func (d *DateTime) EncodeICalValue() (string, error) {
-	val := d.t.Format(DateTimeFormatString)
-	loc := d.t.Location()
-	if loc == time.UTC {
-		val = fmt.Sprintf("%sZ", val)
+	var val string
+	if d.fullTime {
+		val = d.t.Format(DateTimeFormatString)
+		loc := d.t.Location()
+		if loc == time.UTC {
+			val = fmt.Sprintf("%sZ", val)
+		}
+	} else {
+		val = d.t.Format(DateFormatString)
 	}
+
 	return val, nil
 }
 
 // decodes the datetime value from the iCalendar specification
 func (d *DateTime) DecodeICalValue(value string) error {
 	layout := DateTimeFormatString
+	d.fullTime = true
 	if strings.HasSuffix(value, "Z") {
 		layout = UTCDateTimeFormatString
 	} else if len(value) == 8 {
 		layout = DateFormatString
+		d.fullTime = false
 	}
 	var err error
 	d.t, err = time.ParseInLocation(layout, value, time.UTC)
