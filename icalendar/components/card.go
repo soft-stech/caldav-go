@@ -1,8 +1,9 @@
 package components
 
 import (
-	"github.com/jkrecek/caldav-go/icalendar/values"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/icalendar/values"
 )
 
 type Card struct {
@@ -19,6 +20,8 @@ type Card struct {
 	DisplayName string `ical:"fn,omitempty"`
 
 	AddressBookKind string `ical:"x_addressbookserver_kind,omitempty"`
+
+	Categories string `ical:"categories,omitempty"`
 
 	Phones []*values.Phone `ical:"tel,omitempty"`
 
