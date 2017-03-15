@@ -20,6 +20,7 @@ const (
 	NamePropertyName                             = "N"
 	OrganizationPropertyName                     = "ORG"
 	ParameterType                                = "TYPE"
+	AddressBookServerMemberName                  = "X-ADDRESSBOOKSERVER-MEMBER"
 )
 
 type ParameterName string
