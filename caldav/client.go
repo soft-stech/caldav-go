@@ -88,6 +88,21 @@ func (c *Client) MakeCalendar(path string) error {
 	}
 }
 
+func (c *Client) CreateNewCalendar(path string, calendar *cent.MKCalendar) error {
+	if req, err := c.WebDAV().Server().NewRequest("MKCALENDAR", path, calendar); err != nil {
+		return utils.NewError(c.MakeCalendar, "unable to create request", c, err)
+	} else if resp, err := c.WebDAV().Do(req); err != nil {
+		return utils.NewError(c.MakeCalendar, "unable to execute request", c, err)
+	} else if resp.StatusCode != http.StatusCreated {
+		err := new(entities.Error)
+		resp.Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.MakeCalendar, msg, c, err)
+	} else {
+		return nil
+	}
+}
+
 // creates or updates one or more events on the remote CalDAV server
 func (c *Client) PutEvents(path string, events ...*components.Event) error {
 	if len(events) <= 0 {

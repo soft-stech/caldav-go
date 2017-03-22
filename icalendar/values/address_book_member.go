@@ -20,7 +20,7 @@ type AddressBookMember struct {
 	Value string
 }
 
-func NewAdressBookMemberWithUUID(uuid string) *AddressBookMember {
+func NewAddressBookMemberWithUUID(uuid string) *AddressBookMember {
 	return &AddressBookMember{
 		Type:  "urn",
 		Field: "uuid",
