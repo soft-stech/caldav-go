@@ -2,10 +2,11 @@ package properties
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -37,6 +38,7 @@ type Property struct {
 	Value, DefaultValue string
 	Params              Params
 	OmitEmpty, Required bool
+	Prefix              string
 }
 
 func (p *Property) HasNameAndValue() bool {
@@ -103,11 +105,16 @@ func MarshalProperty(p *Property) string {
 			keys = append(keys, fmt.Sprintf("%s=%s", name, value))
 		}
 	}
+
 	name = strings.Join(keys, ";")
+	if p.Prefix != "" {
+		name = fmt.Sprintf("%s.%s", p.Prefix, name)
+	}
+
 	return fmt.Sprintf("%s:%s", name, value)
 }
 
-func PropertyFromInterface(target interface{}) (p *Property, err error) {
+func PropertyFromInterface(target interface{}) (p *Property, adds []*Property, err error) {
 
 	var ierr error
 	if va, ok := target.(CanValidateValue); ok {
@@ -136,6 +143,13 @@ func PropertyFromInterface(target interface{}) (p *Property, err error) {
 	if enc, ok := target.(CanEncodeValue); ok {
 		if p.Value, ierr = enc.EncodeICalValue(); ierr != nil {
 			err = utils.NewError(PropertyFromInterface, "interface failed value encoding", target, ierr)
+			return
+		}
+	}
+
+	if enc, ok := target.(CanEncodeAdditionalProperties); ok {
+		if adds, ierr = enc.EncodeAdditionalICalProperties(); ierr != nil {
+			err = utils.NewError(PropertyFromInterface, "interface failed additional values encoding", target, ierr)
 			return
 		}
 	}
@@ -171,10 +185,21 @@ func UnmarshalProperty(line string) *Property {
 	}
 	prop.Name = PropertyName(strings.TrimSpace(npp[0]))
 	prop.Name = PropertyName(propNameDesanitizer.Replace(string(prop.Name)))
+	prop.Name, prop.Prefix = splitPropertyName(prop.Name)
 	prop.Value = propValueDesanitizer.Replace(prop.Value)
 	return prop
 }
 
 func NewProperty(name, value string) *Property {
 	return &Property{Name: PropertyName(name), Value: value}
+}
+
+func splitPropertyName(name PropertyName) (nameOut PropertyName, prefix string) {
+	strs := strings.Split(string(name), ".")
+	nameOut = PropertyName(strs[len(strs)-1])
+	if len(strs) > 1 {
+		prefix = strs[0]
+	}
+
+	return
 }

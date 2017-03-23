@@ -1,6 +1,8 @@
 package values
 
 import (
+	"strings"
+
 	"github.com/jkrecek/caldav-go/icalendar/properties"
 )
 
@@ -11,6 +13,7 @@ const (
 type Email struct {
 	Mail        string
 	Types       []string
+	Label       string
 	IsPreferred bool
 }
 
@@ -47,12 +50,14 @@ func (e *Email) EncodeICalParams() (properties.Params, error) {
 
 func (e *Email) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
-		if param.Name == properties.ParameterType {
+		if strings.EqualFold(string(param.Name), properties.ParameterType) {
 			if param.Value == preferredTypeValue {
 				e.IsPreferred = true
 			} else {
 				e.Types = append(e.Types, param.Value)
 			}
+		} else if strings.EqualFold(string(param.Name), properties.ABLabel) {
+			e.Label = param.Value
 		}
 	}
 	return nil
@@ -69,4 +74,13 @@ func (e *Email) DecodeICalValue(value string) error {
 
 func (e *Email) EncodeICalName() (properties.PropertyName, error) {
 	return properties.EmailPropertyName, nil
+}
+
+func (e *Email) EncodeAdditionalICalProperties() ([]*properties.Property, error) {
+	var props []*properties.Property
+	if e.Label != "" {
+		props = append(props, properties.NewProperty("X-ABLabel", e.Label))
+	}
+
+	return props, nil
 }

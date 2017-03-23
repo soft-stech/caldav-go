@@ -30,6 +30,7 @@ const (
 	TimeZoneIdPropertyName                    = "TZID"
 	ValuePropertyName                         = "VALUE"
 	AlternateRepresentationName               = "ALTREP"
+	ABLabel                                   = "X_ABLABEL"
 )
 
 type Param struct {

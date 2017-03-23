@@ -2,10 +2,15 @@ package components
 
 import (
 	"fmt"
+	"testing"
+
+	"regexp"
+
+	"strings"
+
 	"github.com/jkrecek/caldav-go/icalendar"
 	"github.com/jkrecek/caldav-go/icalendar/values"
 	. "gopkg.in/check.v1"
-	"testing"
 )
 
 const (
@@ -88,4 +93,85 @@ func (s *CardSuite) TestUnmarshalGroup(c *C) {
 	err := icalendar.Unmarshal(exampleGroupRaw, &card)
 	c.Assert(err, IsNil)
 	c.Assert(card.IsGroup(), Equals, true)
+}
+
+func (s *CardSuite) TestUnmarshalAnotherCards(c *C) {
+	example := `
+BEGIN:VCARD
+VERSION:3.0
+UID:123412
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:Appleseed;John;;;
+FN:John  Appleseed
+TEL;type=IPHONE;type=CELL;type=VOICE;type=pref:(408) 555-0126
+item1.EMAIL;type=INTERNET;type=pref:john@example.com
+item1.X-ABLabel:Home Email
+item2.EMAIL;type=INTERNET:j.appleseed@icloud.com
+item2.X-ABLabel:Work Email
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+UID:5673128
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:Second;Dude;;;
+FN:Dude  Second
+TEL;type=IPHONE;type=CELL;type=VOICE;type=pref:(212) 333-4455
+item1.EMAIL;type=INTERNET;type=pref:sd@example.com
+item1.X-ABLabel:Home Email
+item2.EMAIL;type=INTERNET:s.dude@icloud.com
+item2.X-ABLabel:Work Email
+END:VCARD`
+
+	var contacts []Card
+	err := icalendar.Unmarshal(example, &contacts)
+	c.Assert(err, IsNil)
+	c.Assert(len(contacts), Equals, 2)
+	c.Assert(len(contacts[0].Emails), Equals, 2)
+	c.Assert(contacts[0].Emails[0].IsPreferred, Equals, true)
+	c.Assert(contacts[0].Emails[0].Mail, Equals, "john@example.com")
+	c.Assert(contacts[0].Emails[0].Label, Equals, "Home Email")
+	c.Assert(len(contacts[1].Emails), Equals, 2)
+	c.Assert(contacts[1].Emails[1].IsPreferred, Equals, false)
+	c.Assert(contacts[1].Emails[1].Mail, Equals, "s.dude@icloud.com")
+	c.Assert(contacts[1].Emails[1].Label, Equals, "Work Email")
+
+	cc, err := icalendar.Marshal(contacts)
+	c.Assert(err, IsNil)
+	c.Assert(strings.ToLower(strings.Replace(cc, "\r\n", "\n", -1)), Equals, strings.ToLower(strings.TrimSpace(example)))
+}
+
+func (s *CardSuite) TestUnmarshalAnother2Cards(c *C) {
+	example := `
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:Appleseed;John;;;
+FN:John  Appleseed
+item1.EMAIL;type=INTERNET;type=pref:john@example.com
+item1.X-ABLabel:Home Email
+item2.EMAIL;type=INTERNET:j.appleseed@icloud.com
+item2.X-ABLabel:Work Email
+TEL;type=IPHONE;type=CELL;type=VOICE;type=pref:(408) 555-0126
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:Second;Dude;;;
+FN: Dude  Second
+item1.EMAIL;type=INTERNET;type=pref:sd@example.com
+item1.X-ABLabel:Home Email
+item2.EMAIL;type=INTERNET:s.dude@icloud.com
+item2.X-ABLabel:Work Email
+TEL;type=IPHONE;type=CELL;type=VOICE;type=pref:(212) 333-4455
+END:VCARD`
+
+	rr := regexp.MustCompile(`(BEGIN:VCARD(?:.|\n)*?END:VCARD)`)
+	sub := rr.FindAllStringSubmatch(example, -1)
+	for _, ss := range sub {
+		var contacts Card
+		err := icalendar.Unmarshal(ss[1], &contacts)
+		c.Assert(err, IsNil)
+		c.Log(contacts.Emails)
+	}
+
 }

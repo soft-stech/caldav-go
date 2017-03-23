@@ -2,6 +2,7 @@ package values
 
 import (
 	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"strings"
 )
 
 type Phone struct {
@@ -43,7 +44,7 @@ func (p *Phone) EncodeICalParams() (properties.Params, error) {
 
 func (p *Phone) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
-		if param.Name == properties.ParameterType {
+		if strings.EqualFold(string(param.Name), properties.ParameterType) {
 			if param.Value == preferredTypeValue {
 				p.IsPreferred = true
 			} else {
@@ -51,6 +52,7 @@ func (p *Phone) DecodeICalParams(params properties.Params) error {
 			}
 		}
 	}
+
 	return nil
 }
 

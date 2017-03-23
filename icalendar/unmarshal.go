@@ -2,13 +2,14 @@ package icalendar
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -54,6 +55,20 @@ func tokenizeSlice(slice []string, name ...string) (*token, error) {
 		}
 
 		prop := properties.UnmarshalProperty(line)
+
+		// If we have following property it is actually parameter
+		if prop.Prefix != "" {
+			for _, propList := range tok.properties {
+				for _, aa := range propList {
+					if aa.Prefix == prop.Prefix {
+						aa.Params = append(aa.Params, properties.Param{
+							Name:  properties.ParameterName(prop.Name),
+							Value: prop.Value,
+						})
+					}
+				}
+			}
+		}
 
 		if prop.Name.Equals("begin") {
 			for j := i; j < size; j++ {
@@ -313,7 +328,12 @@ func hydrateComponents(v reflect.Value, components []*token) error {
 			msg := fmt.Sprintf("unable to hydrate component %d", i)
 			return utils.NewError(hydrateComponent, msg, component, err)
 		} else {
-			v.Set(reflect.Append(vdref, velem))
+			if velem.Kind() == reflect.Ptr {
+				velemelem := velem.Elem()
+				v.Elem().Set(reflect.Append(vdref, velemelem))
+			} else {
+				v.Set(reflect.Append(vdref, velem))
+			}
 		}
 	}
 	return nil
