@@ -175,3 +175,106 @@ END:VCARD`
 	}
 
 }
+
+
+func (s *CardSuite) TestLargeAmountCars(c *C) {
+	example := `BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:bb;aa;;;
+FN: aa  bb
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:Contact;Contact;;;
+FN: Contact  Contact
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:Contact;Test iCloudd;;;
+FN: Test iCloudd  Contact
+TEL;type=CELL;type=VOICE;type=pref:24 0220 17
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:dd;cc;;;
+FN: cc  dd
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:Doe;Carl;;;
+FN: Carl  Doe
+ORG:Doe Enterprises;
+EMAIL;type=INTERNET;type=HOME;type=pref:carl.doe@example.com
+TEL;type=CELL;type=VOICE;type=pref:+421121244555
+TEL;type=HOME;type=VOICE:+420 603 287 934
+TEL;type=WORK;type=VOICE:603 823 444
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:Dude;Some;;;
+FN: Some  Dude
+ORG:Dude's Company;
+EMAIL;type=INTERNET;type=HOME;type=pref:dude@mail.com
+EMAIL;type=INTERNET;type=WORK:some@icloud.com
+TEL;type=HOME;type=VOICE;type=pref:(313) 333-3333
+TEL;type=CELL;type=VOICE:(414) 444-4444
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:ff;ee;;;
+FN: ee  ff
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:Group;Account;;;
+FN: Account  Group
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:hh;gg;;;
+FN: gg  hh
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:IMLast;IMFirst;;;
+FN: IMFirst  IMLast
+ORG:Immomig;
+EMAIL;type=INTERNET;type=HOME;type=pref:immomig@mail.com
+TEL;type=HOME;type=VOICE;type=pref:(212) 111-1111
+TEL;type=CELL;type=VOICE:(212) 222-2222
+ADR;type=HOME;type=pref:;;215 Broaway Ave\nApt 25;Manhattan;NY;11111;United States
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:marian 99;test;;;
+FN: test  marian 99
+TEL;type=HOME;type=VOICE;type=pref:776427542
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 9.3.5//EN
+N:14000;test name;;;
+FN: test name  14000
+EMAIL;type=INTERNET;type=HOME;type=pref:temail@realpad.eu
+TEL;type=HOME;type=VOICE;type=pref:123456
+END:VCARD`
+
+	var contacts []Card
+	err := icalendar.Unmarshal(example, &contacts)
+	c.Assert(err, IsNil)
+	c.Log(len(contacts))
+	for _, cnt := range contacts {
+		c.Log(cnt.DisplayName)
+	}
+}
