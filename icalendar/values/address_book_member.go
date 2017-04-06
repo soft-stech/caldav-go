@@ -5,8 +5,6 @@ import (
 
 	"fmt"
 
-	"errors"
-
 	"github.com/jkrecek/caldav-go/icalendar/properties"
 )
 
@@ -34,13 +32,12 @@ func (m *AddressBookMember) EncodeICalValue() (string, error) {
 
 func (m *AddressBookMember) DecodeICalValue(value string) error {
 	parts := addressBookValueRegex.FindStringSubmatch(value)
-	if parts == nil || len(parts) != 4 {
-		return errors.New("Invalid input in Address Member value")
-	}
+	if len(parts) == 4 {
+		m.Type = parts[1]
+		m.Field = parts[2]
+		m.Value = parts[3]
 
-	m.Type = parts[1]
-	m.Field = parts[2]
-	m.Value = parts[3]
+	}
 
 	return nil
 }

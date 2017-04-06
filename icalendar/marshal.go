@@ -52,6 +52,10 @@ func marshalCollection(v reflect.Value) (string, error) {
 
 func marshalStruct(v reflect.Value) (string, error) {
 
+	if ovv, ok := v.Interface().(MarshalValue); ok {
+		v = reflect.ValueOf(ovv.MarshalValue())
+	}
+
 	var out []string
 
 	// iterate over all fields
@@ -124,6 +128,10 @@ func marshalStruct(v reflect.Value) (string, error) {
 }
 
 func objectEncoder(v reflect.Value) (string, error) {
+
+	if ovv, ok := v.Interface().(MarshalValue); ok {
+		v = reflect.ValueOf(ovv.MarshalValue())
+	}
 
 	// decompose the value into its interface parts
 	v = dereferencePointerValue(v)
@@ -215,9 +223,17 @@ func encode(v reflect.Value, encoders ...encoder) (string, error) {
 
 }
 
+type MarshalValue interface {
+	MarshalValue() interface{}
+}
+
 type orderedItem struct {
 	orderId int
 	v       interface{}
+}
+
+func (o orderedItem) MarshalValue() interface{} {
+	return o.v
 }
 
 // converts an iCalendar component into its string representation
