@@ -22,6 +22,8 @@ type DateTime struct {
 	fullTime bool
 }
 
+type DateTimeFullDay DateTime
+
 type DateTimes []*DateTime
 
 // The exception dates, if specified, are used in computing the recurrence set. The recurrence set is the complete set
@@ -65,6 +67,12 @@ func NewDateTimeDate(t time.Time) *DateTime {
 // creates a new icalendar datetime array representation
 func NewDateTimes(dates ...*DateTime) DateTimes {
 	return DateTimes(dates)
+}
+
+// creates a new icalendar datetime representation
+func NewDateTimeFullDay(t time.Time) *DateTimeFullDay {
+	datetimes := NewDateTime(t)
+	return (*DateTimeFullDay)(datetimes)
 }
 
 // creates a new icalendar datetime array representation
@@ -178,6 +186,16 @@ func (d *DateTime) String() string {
 	} else {
 		return s
 	}
+}
+
+// encodes the datetime for full day value for the iCalendar specification
+func (d *DateTimeFullDay) EncodeICalValue() (string, error) {
+	val := d.t.Format(DateFormatString)
+	loc := d.t.Location()
+	if loc == time.UTC {
+		val = fmt.Sprintf("%sZ", val)
+	}
+	return val, nil
 }
 
 // encodes a list of datetime values for the iCalendar specification

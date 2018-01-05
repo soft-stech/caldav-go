@@ -2,9 +2,10 @@ package components
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/jkrecek/caldav-go/icalendar/values"
 	"github.com/jkrecek/caldav-go/utils"
-	"time"
 )
 
 type Calendar struct {
@@ -60,7 +61,7 @@ func (c *Calendar) ValidateICalValue() error {
 			return utils.NewError(c.ValidateICalValue, msg, c, err)
 		}
 
-		if e.DateStart == nil && c.Method == "" {
+		if e.DateStart == nil && e.DateStartFull == nil && c.Method == "" {
 			msg := fmt.Sprintf("no value for method and no start date defined on event %d", i)
 			return utils.NewError(c.ValidateICalValue, msg, c, nil)
 		}

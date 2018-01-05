@@ -16,7 +16,10 @@ type Event struct {
 	DateStamp *values.DateTime `ical:"dtstamp,required"`
 
 	// specifies when the calendar component begins.
-	DateStart *values.DateTime `ical:"dtstart,required"`
+	DateStart *values.DateTime `ical:"dtstart,omitempty"`
+
+	// specifies when the calendar component begins.
+	DateStartFull *values.DateTimeFullDay `ical:"dtstart;value=date,omitempty"`
 
 	// specifies the date and time that a calendar component ends.
 	DateEnd *values.DateTime `ical:"dtend,omitempty"`
@@ -110,12 +113,12 @@ func (e *Event) ValidateICalValue() error {
 		return utils.NewError(e.ValidateICalValue, "the UID value must be set", e, nil)
 	}
 
-	if e.DateStart == nil {
+	if e.DateStart == nil && e.DateStartFull == nil {
 		return utils.NewError(e.ValidateICalValue, "event start date must be set", e, nil)
 	}
 
-	if e.DateEnd == nil && e.Duration == nil {
-		return utils.NewError(e.ValidateICalValue, "event end date or duration must be set", e, nil)
+	if e.DateStartFull == nil && e.DateEnd == nil && e.Duration == nil {
+		return utils.NewError(e.ValidateICalValue, "for event which is not full day, end date or duration must be set", e, nil)
 	}
 
 	if e.DateEnd != nil && e.Duration != nil {
@@ -155,6 +158,14 @@ func NewEvent(uid string, start time.Time) *Event {
 	e.UID = uid
 	e.DateStamp = values.NewDateTime(time.Now().UTC())
 	e.DateStart = values.NewDateTime(start)
+	return e
+}
+
+// creates a new iCalendar event that lasts a certain duration
+func NewEventWithFullDayStart(uid string, start time.Time) *Event {
+	e := NewEvent(uid, start)
+	e.DateStart = nil
+	e.DateStartFull = values.NewDateTimeFullDay(start)
 	return e
 }
 
