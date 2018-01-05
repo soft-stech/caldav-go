@@ -1,11 +1,12 @@
 package caldav
 
 import (
+	"io/ioutil"
+	"log"
+
 	"github.com/jkrecek/caldav-go/icalendar"
 	"github.com/jkrecek/caldav-go/utils"
 	"github.com/jkrecek/caldav-go/webdav"
-	"io/ioutil"
-	"log"
 )
 
 var _ = log.Print

@@ -2,6 +2,7 @@ package entities
 
 import (
 	"encoding/xml"
+
 	"github.com/jkrecek/caldav-go/caldav/values"
 	"github.com/jkrecek/caldav-go/icalendar/properties"
 )

@@ -2,9 +2,10 @@ package components
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/values"
 	"net/url"
 	"time"
+
+	"github.com/jkrecek/caldav-go/icalendar/values"
 )
 
 type TimeZone struct {

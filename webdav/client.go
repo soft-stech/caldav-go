@@ -2,10 +2,11 @@ package webdav
 
 import (
 	"fmt"
+	nhttp "net/http"
+
 	"github.com/jkrecek/caldav-go/http"
 	"github.com/jkrecek/caldav-go/utils"
 	"github.com/jkrecek/caldav-go/webdav/entities"
-	nhttp "net/http"
 )
 
 const (

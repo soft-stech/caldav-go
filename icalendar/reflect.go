@@ -2,11 +2,12 @@ package icalendar
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -54,7 +55,7 @@ func newValue(in reflect.Value) (out reflect.Value, isArrayElement bool) {
 
 func dereferencePointerValue(v reflect.Value) reflect.Value {
 	for (v.Kind() == reflect.Interface || v.Kind() == reflect.Ptr) && v.Elem().IsValid() {
-		v = v.Elem()
+		return v.Elem()
 	}
 	return v
 }

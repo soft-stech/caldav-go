@@ -2,6 +2,7 @@ package entities
 
 import (
 	"encoding/xml"
+
 	"github.com/jkrecek/caldav-go/webdav/entities"
 )
 

@@ -2,11 +2,12 @@ package entities
 
 import (
 	"encoding/xml"
+	"strings"
+
 	"github.com/jkrecek/caldav-go/caldav/values"
 	"github.com/jkrecek/caldav-go/icalendar"
 	"github.com/jkrecek/caldav-go/icalendar/components"
 	"github.com/jkrecek/caldav-go/utils"
-	"strings"
 )
 
 // a CalDAV calendar data object

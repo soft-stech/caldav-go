@@ -1,8 +1,9 @@
 package http
 
 import (
-	"github.com/jkrecek/caldav-go/utils"
 	"net/http"
+
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 // a client for making HTTP requests

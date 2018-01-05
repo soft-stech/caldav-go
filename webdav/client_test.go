@@ -1,11 +1,12 @@
 package webdav
 
 import (
-	"github.com/jkrecek/caldav-go/webdav/entities"
-	. "gopkg.in/check.v1"
 	"net/url"
 	"os"
 	"testing"
+
+	"github.com/jkrecek/caldav-go/webdav/entities"
+	. "gopkg.in/check.v1"
 )
 
 type ClientSuite struct {

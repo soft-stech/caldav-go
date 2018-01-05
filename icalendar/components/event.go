@@ -129,6 +129,10 @@ func (e *Event) ValidateICalValue() error {
 
 }
 
+func (e *Event) AddAttendees(a ...*values.AttendeeContact) {
+	e.Attendees = append(e.Attendees, a...)
+}
+
 // adds one or more recurrence rule to the event
 func (e *Event) AddRecurrenceRules(r ...*values.RecurrenceRule) {
 	e.RecurrenceRules = append(e.RecurrenceRules, r...)

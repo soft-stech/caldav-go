@@ -2,12 +2,14 @@ package values
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 // The recurrence rule, if specified, is used in computing the recurrence set. The recurrence set is the complete set
@@ -85,6 +87,26 @@ var weekdayRegExp = regexp.MustCompile("MO|TU|WE|TH|FR|SA|SU")
 // returns true if weekday is a valid constant
 func (r RecurrenceWeekday) IsValidWeekDay() bool {
 	return weekdayRegExp.MatchString(strings.ToUpper(string(r)))
+}
+
+func (r RecurrenceWeekday) NativeWeekday() time.Weekday {
+	switch r {
+	case MondayRecurrenceWeekday:
+		return time.Monday
+	case TuesdayRecurrenceWeekday:
+		return time.Tuesday
+	case WednesdayRecurrenceWeekday:
+		return time.Wednesday
+	case ThursdayRecurrenceWeekday:
+		return time.Thursday
+	case FridayRecurrenceWeekday:
+		return time.Friday
+	case SaturdayRecurrenceWeekday:
+		return time.Saturday
+	case SundayRecurrenceWeekday:
+		return time.Sunday
+	}
+	panic("Unrecognized RecurrenceWeekday")
 }
 
 var frequencyRegExp = regexp.MustCompile("SECONDLY|MINUTELY|HOURLY|DAILY|WEEKLY|MONTHLY|YEARLY")

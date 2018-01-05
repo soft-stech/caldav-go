@@ -53,7 +53,6 @@ func tokenizeSlice(slice []string, name ...string) (*token, error) {
 			next := slice[i+1]
 			line += next[1:len(next)]
 		}
-
 		prop := properties.UnmarshalProperty(line)
 
 		// If we have following property it is actually parameter
@@ -90,11 +89,9 @@ func tokenizeSlice(slice []string, name ...string) (*token, error) {
 		} else {
 			tok.properties[prop.Name] = []*properties.Property{prop}
 		}
-
 	}
 
 	return tok, nil
-
 }
 
 func hydrateInterface(v reflect.Value, prop *properties.Property) (bool, error) {
@@ -213,6 +210,7 @@ func hydrateProperty(v reflect.Value, prop *properties.Property) error {
 			return utils.NewError(hydrateProperty, "unable to set array value", v, nil)
 		} else {
 			voldval.Set(reflect.Append(voldval, vnew))
+			return nil
 		}
 	} else if vlit {
 		// for literals, set the dereferenced value

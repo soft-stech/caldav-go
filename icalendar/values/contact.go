@@ -2,11 +2,12 @@ package values
 
 import (
 	"fmt"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"net/mail"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print

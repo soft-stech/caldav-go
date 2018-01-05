@@ -1,10 +1,11 @@
 package values
 
 import (
-	"github.com/jkrecek/caldav-go/icalendar"
-	. "gopkg.in/check.v1"
 	"testing"
 	"time"
+
+	"github.com/jkrecek/caldav-go/icalendar"
+	. "gopkg.in/check.v1"
 )
 
 type DurationSuite struct{}

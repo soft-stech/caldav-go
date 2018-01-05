@@ -2,6 +2,11 @@ package caldav
 
 import (
 	"fmt"
+	"net/url"
+	"os"
+	"testing"
+	"time"
+
 	calentities "github.com/jkrecek/caldav-go/caldav/entities"
 	"github.com/jkrecek/caldav-go/icalendar/components"
 	"github.com/jkrecek/caldav-go/icalendar/properties"
@@ -9,10 +14,6 @@ import (
 	"github.com/jkrecek/caldav-go/webdav"
 	webentities "github.com/jkrecek/caldav-go/webdav/entities"
 	. "gopkg.in/check.v1"
-	"net/url"
-	"os"
-	"testing"
-	"time"
 )
 
 type ClientSuite struct {
