@@ -2,11 +2,12 @@ package icalendar
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 const (
@@ -30,11 +31,13 @@ func tagAndJoinValue(v reflect.Value, in []string) (string, error) {
 }
 
 func marshalCollection(v reflect.Value) (string, error) {
-
 	var out []string
 
 	for i, n := 0, v.Len(); i < n; i++ {
 		vi := v.Index(i).Interface()
+		if v.Index(i).Kind() == reflect.Ptr {
+			vi = orderedItem{orderId: i + 1, v: vi}
+		}
 		if encoded, err := Marshal(vi); err != nil {
 			msg := fmt.Sprintf("unable to encode interface at index %d", i)
 			return "", utils.NewError(marshalCollection, msg, vi, err)
@@ -48,6 +51,10 @@ func marshalCollection(v reflect.Value) (string, error) {
 }
 
 func marshalStruct(v reflect.Value) (string, error) {
+
+	if ovv, ok := v.Interface().(MarshalValue); ok {
+		v = reflect.ValueOf(ovv.MarshalValue())
+	}
 
 	var out []string
 
@@ -85,7 +92,7 @@ func marshalStruct(v reflect.Value) (string, error) {
 		// now check to see if the field value overrides the defaults...
 		if !isInvalidOrEmptyValue(fv) {
 			// first, check the field value interface for overrides...
-			if overrides, err := properties.PropertyFromInterface(fi); err != nil {
+			if overrides, _, err := properties.PropertyFromInterface(fi); err != nil {
 				msg := fmt.Sprintf("field %s failed validation", fs.Name)
 				return "", utils.NewError(marshalStruct, msg, v.Interface(), err)
 			} else if p.Merge(overrides); p.Value == "" {
@@ -122,6 +129,10 @@ func marshalStruct(v reflect.Value) (string, error) {
 
 func objectEncoder(v reflect.Value) (string, error) {
 
+	if ovv, ok := v.Interface().(MarshalValue); ok {
+		v = reflect.ValueOf(ovv.MarshalValue())
+	}
+
 	// decompose the value into its interface parts
 	v = dereferencePointerValue(v)
 
@@ -146,7 +157,12 @@ func stringEncoder(v reflect.Value) (string, error) {
 func propertyEncoder(v reflect.Value) (string, error) {
 
 	vi := v.Interface()
-	if p, err := properties.PropertyFromInterface(vi); err != nil {
+
+	if orVi, ok := vi.(orderedItem); ok {
+		return encodeOrderedProperty(orVi)
+	}
+
+	if p, _, err := properties.PropertyFromInterface(vi); err != nil {
 
 		// return early if interface fails its own validation
 		return "", err
@@ -162,6 +178,37 @@ func propertyEncoder(v reflect.Value) (string, error) {
 
 }
 
+func encodeOrderedProperty(item orderedItem) (string, error) {
+	p, adds, err := properties.PropertyFromInterface(item.v)
+	if err != nil {
+		// return early if interface fails its own validation
+		return "", err
+	}
+
+	if len(adds) == 0 {
+		if p.HasNameAndValue() {
+			return properties.MarshalProperty(p), nil
+		}
+	} else {
+		props := []*properties.Property{p}
+		props = append(props, adds...)
+
+		var marshProperties []string
+		for _, prop := range props {
+			if prop.HasNameAndValue() {
+				prop.Prefix = fmt.Sprintf("item%d", item.orderId)
+				marshProp := properties.MarshalProperty(prop)
+				marshProperties = append(marshProperties, marshProp)
+			}
+		}
+
+		if len(marshProperties) > 0 {
+			return strings.Join(marshProperties, "\n"), nil
+		}
+	}
+	return "", nil
+}
+
 func encode(v reflect.Value, encoders ...encoder) (string, error) {
 
 	for _, encode := range encoders {
@@ -174,6 +221,19 @@ func encode(v reflect.Value, encoders ...encoder) (string, error) {
 
 	return "", nil
 
+}
+
+type MarshalValue interface {
+	MarshalValue() interface{}
+}
+
+type orderedItem struct {
+	orderId int
+	v       interface{}
+}
+
+func (o orderedItem) MarshalValue() interface{} {
+	return o.v
 }
 
 // converts an iCalendar component into its string representation

@@ -2,11 +2,12 @@ package webdav
 
 import (
 	"encoding/xml"
-	"github.com/taviti/caldav-go/http"
-	"github.com/taviti/caldav-go/utils"
 	"io/ioutil"
 	"log"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/http"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print

@@ -2,8 +2,8 @@ package values
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 	"log"
 	"net/mail"
 	"strings"
@@ -56,7 +56,7 @@ func (c *Contact) EncodeICalValue() (string, error) {
 // encodes the contact params for the iCalendar specification
 func (c *Contact) EncodeICalParams() (params properties.Params, err error) {
 	if c.Entry.Name != "" {
-		params = properties.Params{properties.CanonicalNameParameterName: c.Entry.Name}
+		params = properties.Params{{properties.CanonicalNameParameterName, c.Entry.Name}}
 	}
 	return
 }
@@ -72,8 +72,11 @@ func (c *Contact) DecodeICalValue(value string) error {
 
 // decodes the contact params from the iCalendar specification
 func (c *Contact) DecodeICalParams(params properties.Params) error {
-	if name, found := params[properties.CanonicalNameParameterName]; found {
-		c.Entry.Name = name
+	for _, param := range params {
+		if param.Name == properties.CanonicalNameParameterName {
+			c.Entry.Name = param.Value
+			break
+		}
 	}
 	return nil
 }

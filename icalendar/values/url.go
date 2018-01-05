@@ -1,8 +1,8 @@
 package values
 
 import (
-	"github.com/taviti/caldav-go/icalendar/properties"
-	"github.com/taviti/caldav-go/utils"
+	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/jkrecek/caldav-go/utils"
 	"net/url"
 )
 
@@ -18,9 +18,10 @@ func (u *Url) EncodeICalValue() (string, error) {
 
 // encodes the url params for the iCalendar specification
 func (u *Url) EncodeICalParams() (params properties.Params, err error) {
-	params = properties.Params{
-		properties.ValuePropertyName: "URI",
-	}
+	params = properties.Params{{
+		properties.ValuePropertyName,
+		"URI",
+	}}
 	return
 }
 

@@ -2,10 +2,11 @@ package properties
 
 import (
 	"fmt"
-	"github.com/taviti/caldav-go/utils"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 var _ = log.Print
@@ -37,6 +38,7 @@ type Property struct {
 	Value, DefaultValue string
 	Params              Params
 	OmitEmpty, Required bool
+	Prefix              string
 }
 
 func (p *Property) HasNameAndValue() bool {
@@ -94,20 +96,25 @@ func MarshalProperty(p *Property) string {
 	name := strings.ToUpper(propNameSanitizer.Replace(string(p.Name)))
 	value := propValueSanitizer.Replace(p.Value)
 	keys := []string{name}
-	for name, value := range p.Params {
-		name = ParameterName(strings.ToUpper(propNameSanitizer.Replace(string(name))))
-		value = propValueSanitizer.Replace(value)
+	for _, param := range p.Params {
+		name := ParameterName(strings.ToUpper(propNameSanitizer.Replace(string(param.Name))))
+		value := propValueSanitizer.Replace(param.Value)
 		if strings.ContainsAny(value, " :") {
 			keys = append(keys, fmt.Sprintf("%s=\"%s\"", name, value))
 		} else {
 			keys = append(keys, fmt.Sprintf("%s=%s", name, value))
 		}
 	}
+
 	name = strings.Join(keys, ";")
+	if p.Prefix != "" {
+		name = fmt.Sprintf("%s.%s", p.Prefix, name)
+	}
+
 	return fmt.Sprintf("%s:%s", name, value)
 }
 
-func PropertyFromInterface(target interface{}) (p *Property, err error) {
+func PropertyFromInterface(target interface{}) (p *Property, adds []*Property, err error) {
 
 	var ierr error
 	if va, ok := target.(CanValidateValue); ok {
@@ -140,6 +147,13 @@ func PropertyFromInterface(target interface{}) (p *Property, err error) {
 		}
 	}
 
+	if enc, ok := target.(CanEncodeAdditionalProperties); ok {
+		if adds, ierr = enc.EncodeAdditionalICalProperties(); ierr != nil {
+			err = utils.NewError(PropertyFromInterface, "interface failed additional values encoding", target, ierr)
+			return
+		}
+	}
+
 	return
 
 }
@@ -152,7 +166,7 @@ func UnmarshalProperty(line string) *Property {
 	}
 	npp := strings.Split(nvp[0], ";")
 	if len(npp) > 1 {
-		prop.Params = make(map[ParameterName]string, 0)
+		prop.Params = make(Params, 0)
 		for i := 1; i < len(npp); i++ {
 			var key, value string
 			kvp := strings.Split(npp[i], "=")
@@ -163,15 +177,29 @@ func UnmarshalProperty(line string) *Property {
 				value = propValueDesanitizer.Replace(value)
 				value = strings.Trim(value, "\"")
 			}
-			prop.Params[ParameterName(key)] = value
+			prop.Params = append(prop.Params, Param{
+				Name:  ParameterName(key),
+				Value: value,
+			})
 		}
 	}
 	prop.Name = PropertyName(strings.TrimSpace(npp[0]))
 	prop.Name = PropertyName(propNameDesanitizer.Replace(string(prop.Name)))
+	prop.Name, prop.Prefix = splitPropertyName(prop.Name)
 	prop.Value = propValueDesanitizer.Replace(prop.Value)
 	return prop
 }
 
 func NewProperty(name, value string) *Property {
 	return &Property{Name: PropertyName(name), Value: value}
+}
+
+func splitPropertyName(name PropertyName) (nameOut PropertyName, prefix string) {
+	strs := strings.Split(string(name), ".")
+	nameOut = PropertyName(strs[len(strs)-1])
+	if len(strs) > 1 {
+		prefix = strs[0]
+	}
+
+	return
 }

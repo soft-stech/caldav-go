@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/taviti/caldav-go/utils"
+	"github.com/jkrecek/caldav-go/utils"
 	"net/http"
 )
 
@@ -27,6 +27,10 @@ func (c *Client) Native() *http.Client {
 // returns the embedded HTTP server reference
 func (c *Client) Server() *Server {
 	return c.server
+}
+
+func (c *Client) SetServer(s *Server) {
+	c.server = s
 }
 
 // executes an HTTP request

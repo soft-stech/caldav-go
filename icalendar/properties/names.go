@@ -1,6 +1,8 @@
 package properties
 
-import "strings"
+import (
+	"strings"
+)
 
 type PropertyName string
 
@@ -13,6 +15,12 @@ const (
 	RecurrenceDateTimesPropertyName              = "RDATE"
 	RecurrenceRulePropertyName                   = "RRULE"
 	LocationPropertyName                         = "LOCATION"
+	EmailPropertyName                            = "EMAIL"
+	PhonePropertyName                            = "TEL"
+	NamePropertyName                             = "N"
+	OrganizationPropertyName                     = "ORG"
+	ParameterType                                = "TYPE"
+	AddressBookServerMemberName                  = "X-ADDRESSBOOKSERVER-MEMBER"
 )
 
 type ParameterName string
@@ -22,9 +30,15 @@ const (
 	TimeZoneIdPropertyName                    = "TZID"
 	ValuePropertyName                         = "VALUE"
 	AlternateRepresentationName               = "ALTREP"
+	ABLabel                                   = "X_ABLABEL"
 )
 
-type Params map[ParameterName]string
+type Param struct {
+	Name  ParameterName
+	Value string
+}
+
+type Params []Param
 
 func (p PropertyName) Equals(test string) bool {
 	return strings.EqualFold(string(p), test)

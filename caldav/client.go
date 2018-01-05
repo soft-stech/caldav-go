@@ -2,14 +2,15 @@ package caldav
 
 import (
 	"fmt"
-	cent "github.com/taviti/caldav-go/caldav/entities"
-	"github.com/taviti/caldav-go/icalendar/components"
-	"github.com/taviti/caldav-go/utils"
-	"github.com/taviti/caldav-go/webdav"
-	"github.com/taviti/caldav-go/webdav/entities"
 	"log"
 	"net/http"
 	"strings"
+
+	cent "github.com/jkrecek/caldav-go/caldav/entities"
+	"github.com/jkrecek/caldav-go/icalendar/components"
+	"github.com/jkrecek/caldav-go/utils"
+	"github.com/jkrecek/caldav-go/webdav"
+	"github.com/jkrecek/caldav-go/webdav/entities"
 )
 
 var _ = log.Print
@@ -87,6 +88,21 @@ func (c *Client) MakeCalendar(path string) error {
 	}
 }
 
+func (c *Client) CreateNewCalendar(path string, calendar *cent.MKCalendar) error {
+	if req, err := c.WebDAV().Server().NewRequest("MKCALENDAR", path, calendar); err != nil {
+		return utils.NewError(c.MakeCalendar, "unable to create request", c, err)
+	} else if resp, err := c.WebDAV().Do(req); err != nil {
+		return utils.NewError(c.MakeCalendar, "unable to execute request", c, err)
+	} else if resp.StatusCode != http.StatusCreated {
+		err := new(entities.Error)
+		resp.Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.MakeCalendar, msg, c, err)
+	} else {
+		return nil
+	}
+}
+
 // creates or updates one or more events on the remote CalDAV server
 func (c *Client) PutEvents(path string, events ...*components.Event) error {
 	if len(events) <= 0 {
@@ -111,6 +127,27 @@ func (c *Client) PutCalendars(path string, calendars ...*components.Calendar) er
 		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
 		return utils.NewError(c.PutCalendars, msg, c, err)
 	}
+	return nil
+}
+
+func (c *Client) DeleteEvent(path string) error {
+	req, err := c.Server().NewRequest("DELETE", path)
+	if err != nil {
+		return utils.NewError(c.DeleteEvent, "unable to encode request", c, err)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return utils.NewError(c.DeleteEvent, "unable to execute request", c, err)
+	}
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
+		err := new(entities.Error)
+		resp.WebDAV().Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.DeleteEvent, msg, c, err)
+	}
+
 	return nil
 }
 

@@ -27,3 +27,7 @@ type CanEncodeName interface {
 type CanEncodeParams interface {
 	EncodeICalParams() (Params, error)
 }
+
+type CanEncodeAdditionalProperties interface {
+	EncodeAdditionalICalProperties() ([]*Property, error)
+}

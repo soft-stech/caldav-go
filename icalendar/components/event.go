@@ -1,9 +1,10 @@
 package components
 
 import (
-	"github.com/taviti/caldav-go/icalendar/values"
-	"github.com/taviti/caldav-go/utils"
 	"time"
+
+	"github.com/jkrecek/caldav-go/icalendar/values"
+	"github.com/jkrecek/caldav-go/utils"
 )
 
 type Event struct {
@@ -72,13 +73,13 @@ type Event struct {
 	RecurrenceId *values.DateTime `ical:"recurrence_id,omitempty"`
 
 	// defines a rule or repeating pattern for recurring events, to-dos, or time zone definitions.
-	RecurrenceRules []*values.RecurrenceRule `ical:",omitempty"`
+	RecurrenceRules []*values.RecurrenceRule `ical:"rrule,omitempty"`
 
 	// property provides the capability to associate a document object with a calendar component.
 	Attachment *values.Url `ical:"attach,omitempty"`
 
 	// defines an "Attendee" within a calendar component.
-	Attendees []*values.AttendeeContact `ical:",omitempty"`
+	Attendees []*values.AttendeeContact `ical:"attendee,omitempty"`
 
 	// defines the categories for a calendar component.
 	Categories *values.CSV `ical:",omitempty"`
