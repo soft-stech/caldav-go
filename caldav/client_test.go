@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	calentities "github.com/jkrecek/caldav-go/caldav/entities"
-	"github.com/jkrecek/caldav-go/icalendar/components"
-	"github.com/jkrecek/caldav-go/icalendar/properties"
-	"github.com/jkrecek/caldav-go/icalendar/values"
-	"github.com/jkrecek/caldav-go/webdav"
-	webentities "github.com/jkrecek/caldav-go/webdav/entities"
+	calentities "github.com/skilld-labs/caldav-go/caldav/entities"
+	"github.com/skilld-labs/caldav-go/icalendar/components"
+	"github.com/skilld-labs/caldav-go/icalendar/properties"
+	"github.com/skilld-labs/caldav-go/icalendar/values"
+	"github.com/skilld-labs/caldav-go/webdav"
+	webentities "github.com/skilld-labs/caldav-go/webdav/entities"
 	. "gopkg.in/check.v1"
 )
 

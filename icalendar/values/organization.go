@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jkrecek/caldav-go/icalendar/properties"
+	"github.com/skilld-labs/caldav-go/icalendar/properties"
 )
 
 type Organization struct {

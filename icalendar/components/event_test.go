@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jkrecek/caldav-go/icalendar"
-	"github.com/jkrecek/caldav-go/icalendar/values"
+	"github.com/skilld-labs/caldav-go/icalendar"
+	"github.com/skilld-labs/caldav-go/icalendar/values"
 	. "gopkg.in/check.v1"
 )
 

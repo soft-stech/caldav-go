@@ -1,8 +1,8 @@
 package webdav
 
 import (
-	"github.com/jkrecek/caldav-go/http"
-	"github.com/jkrecek/caldav-go/utils"
+	"github.com/skilld-labs/caldav-go/http"
+	"github.com/skilld-labs/caldav-go/utils"
 )
 
 // a server that accepts WebDAV requests

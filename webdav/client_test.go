@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/jkrecek/caldav-go/webdav/entities"
+	"github.com/skilld-labs/caldav-go/webdav/entities"
 	. "gopkg.in/check.v1"
 )
 

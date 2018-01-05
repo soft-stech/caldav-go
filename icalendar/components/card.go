@@ -3,7 +3,7 @@ package components
 import (
 	"strings"
 
-	"github.com/jkrecek/caldav-go/icalendar/values"
+	"github.com/skilld-labs/caldav-go/icalendar/values"
 )
 
 const (
@@ -15,7 +15,7 @@ type Card struct {
 
 	UID string `ical:",required"`
 
-	ProductId string `ical:"prodid,-//jkrecek/caldav-go//NONSGML v1.0.0//EN"`
+	ProductId string `ical:"prodid,-//skilld-labs/caldav-go//NONSGML v1.0.0//EN"`
 
 	Name *values.ContactName `ical:"n,omitempty"`
 

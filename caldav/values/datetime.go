@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/jkrecek/caldav-go/icalendar/values"
+	"github.com/skilld-labs/caldav-go/icalendar/values"
 )
 
 // a representation of a date and time for iCalendar
