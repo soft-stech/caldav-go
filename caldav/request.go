@@ -7,10 +7,10 @@ import (
 	"log"
 	"strings"
 
-	"github.com/skilld-labs/caldav-go/http"
-	"github.com/skilld-labs/caldav-go/icalendar"
-	"github.com/skilld-labs/caldav-go/utils"
-	"github.com/skilld-labs/caldav-go/webdav"
+	"github.com/antony360/caldav-go/http"
+	"github.com/antony360/caldav-go/icalendar"
+	"github.com/antony360/caldav-go/utils"
+	"github.com/antony360/caldav-go/webdav"
 )
 
 var _ = log.Print

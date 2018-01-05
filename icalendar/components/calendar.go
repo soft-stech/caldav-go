@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/skilld-labs/caldav-go/icalendar/values"
-	"github.com/skilld-labs/caldav-go/utils"
+	"github.com/antony360/caldav-go/icalendar/values"
+	"github.com/antony360/caldav-go/utils"
 )
 
 type Calendar struct {
@@ -15,7 +15,7 @@ type Calendar struct {
 	Version string `ical:",2.0"`
 
 	// specifies the identifier for the product that created the iCalendar object
-	ProductId string `ical:"prodid,-//skilld-labs/caldav-go//NONSGML v1.0.0//EN"`
+	ProductId string `ical:"prodid,-//antony360/caldav-go//NONSGML v1.0.0//EN"`
 
 	// specifies the text value that uniquely identifies the "VTIMEZONE" calendar component.
 	TimeZoneId string `ical:"tzid,omitempty"`

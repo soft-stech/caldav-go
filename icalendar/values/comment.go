@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/skilld-labs/caldav-go/icalendar/properties"
+	"github.com/antony360/caldav-go/icalendar/properties"
 )
 
 // specifies non-processing information intended to provide a comment to the calendar user.

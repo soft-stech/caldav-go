@@ -2,11 +2,11 @@ package carddav
 
 import (
 	"fmt"
-	cont "github.com/skilld-labs/caldav-go/carddav/entities"
-	"github.com/skilld-labs/caldav-go/icalendar/components"
-	"github.com/skilld-labs/caldav-go/utils"
-	"github.com/skilld-labs/caldav-go/webdav"
-	"github.com/skilld-labs/caldav-go/webdav/entities"
+	cont "github.com/antony360/caldav-go/carddav/entities"
+	"github.com/antony360/caldav-go/icalendar/components"
+	"github.com/antony360/caldav-go/utils"
+	"github.com/antony360/caldav-go/webdav"
+	"github.com/antony360/caldav-go/webdav/entities"
 	"log"
 	"net/http"
 )

@@ -7,7 +7,7 @@ import (
 	spath "path"
 	"strings"
 
-	"github.com/skilld-labs/caldav-go/utils"
+	"github.com/antony360/caldav-go/utils"
 )
 
 var _ = log.Print

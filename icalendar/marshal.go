@@ -9,8 +9,8 @@ import (
 	"github.com/rsniezynski/caldav-go/icalendar/properties"
 	"github.com/rsniezynski/caldav-go/utils"
 
-	"github.com/skilld-labs/caldav-go/icalendar/properties"
-	"github.com/skilld-labs/caldav-go/utils"
+	"github.com/antony360/caldav-go/icalendar/properties"
+	"github.com/antony360/caldav-go/utils"
 )
 
 const (

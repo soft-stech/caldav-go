@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 
-	"github.com/skilld-labs/caldav-go/icalendar/properties"
+	"github.com/antony360/caldav-go/icalendar/properties"
 )
 
 var (
