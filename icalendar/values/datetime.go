@@ -172,12 +172,19 @@ func (d *DateTime) DecodeICalParams(params properties.Params) error {
 	return nil
 }
 
+func loadLocation(name string) (*time.Location, error) {
+	loc, err := time.LoadLocation(name)
+	if err != nil {
+		return time.UTC, nil
+	}
+	return loc, nil
+}
+
 // validates the datetime value against the iCalendar specification
 func (d *DateTime) ValidateICalValue() error {
 
 	loc := d.t.Location()
-
-	if loc == time.Local {
+	if loc.String() == "Local" {
 		msg := "DateTime location may not Local, please use UTC or explicit Location"
 		return utils.NewError(d.ValidateICalValue, msg, d, nil)
 	}

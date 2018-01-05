@@ -22,7 +22,8 @@ var _ = log.Print
 // parameters may also be specified on this property. If the LANGUAGE property parameter is specified, the identified
 // language applies to the CN parameter value.
 type Contact struct {
-	Entry mail.Address
+	Entry  mail.Address
+	Status string
 }
 
 type AttendeeContact Contact
@@ -78,6 +79,9 @@ func (c *Contact) DecodeICalParams(params properties.Params) error {
 			c.Entry.Name = param.Value
 			break
 		}
+	}
+	if partstat, found := params[properties.ParticipationStatusName]; found {
+		c.Status = partstat
 	}
 	return nil
 }

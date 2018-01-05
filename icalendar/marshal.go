@@ -6,6 +6,9 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/rsniezynski/caldav-go/icalendar/properties"
+	"github.com/rsniezynski/caldav-go/utils"
+
 	"github.com/jkrecek/caldav-go/icalendar/properties"
 	"github.com/jkrecek/caldav-go/utils"
 )

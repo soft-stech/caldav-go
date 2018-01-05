@@ -31,6 +31,7 @@ const (
 	ValuePropertyName                         = "VALUE"
 	AlternateRepresentationName               = "ALTREP"
 	ABLabel                                   = "X_ABLABEL"
+	ParticipationStatusName                   = "PARTSTAT"
 )
 
 type Param struct {
