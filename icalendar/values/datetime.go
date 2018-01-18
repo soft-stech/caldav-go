@@ -143,11 +143,17 @@ func (d *DateTime) EncodeICalParams() (params properties.Params, err error) {
 
 // decodes the datetime params from the iCalendar specification
 func (d *DateTime) DecodeICalParams(params properties.Params) error {
+	var name string
 	layout := DateTimeFormatString
 	value := d.t.Format(layout)
-	name, found := params[properties.TimeZoneIdPropertyName]
-	if !found {
-		return nil
+	for n, param := range params {
+		if param.Name == properties.TimeZoneIdPropertyName {
+			name = param.Value
+			break
+		}
+		if n == len(params)-1 {
+			return nil
+		}
 	}
 	loc, err := time.LoadLocation(name)
 	if err != nil {

@@ -72,6 +72,38 @@ func (c *Client) ValidateServer(path string) error {
 	}
 }
 
+func (c *Client) GetGroupMembers(path string) ([]string, error) {
+	var props []*entities.Prop
+	props = append(props, &entities.Prop{})
+	if ms, err := c.WebDAV().Propfind(path, webdav.Depth0, entities.NewGroupMemberSetPropFind()); err != nil {
+		return []string{}, utils.NewError(c.GetGroupMembers, "unable to create request", c, err)
+	} else {
+		return ms.Responses[0].PropStats[0].Prop.GroupMemberSet, nil
+	}
+}
+
+func (c *Client) GetPrincipalGroups(path string) ([]string, error) {
+	var props []*entities.Prop
+	props = append(props, &entities.Prop{})
+	if ms, err := c.WebDAV().Propfind(path, webdav.Depth0, entities.NewPrincipalGroupsPropFind()); err != nil {
+		return []string{}, utils.NewError(c.GetPrincipalGroups, "unable to create request", c, err)
+	} else {
+		return ms.Responses[0].PropStats[0].Prop.PrincipalGroups, nil
+	}
+}
+
+func (c *Client) GrantPrincipals(path, principal string, privileges []string) error {
+	return c.WebDAV().Acl(path, webdav.Depth0, entities.NewGrantPrincipalsAcl(principal, privileges))
+}
+
+func (c *Client) Bind(path, segment, href string) error {
+	return c.WebDAV().Bind(path, webdav.Depth0, entities.NewBind(segment, href))
+}
+
+func (c *Client) Delete(path string) error {
+	return c.WebDAV().Delete(path)
+}
+
 // creates a new calendar collection on a given path
 func (c *Client) MakeCalendar(path string) error {
 	if req, err := c.Server().NewRequest("MKCALENDAR", path); err != nil {

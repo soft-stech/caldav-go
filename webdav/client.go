@@ -108,6 +108,28 @@ func (c *Client) Propfind(path string, depth Depth, pf *entities.Propfind) (*ent
 
 }
 
+func (c *Client) Acl(path string, depth Depth, acl *entities.Acl) error {
+	if req, err := c.Server().NewRequest("ACL", path, acl); err != nil {
+		return utils.NewError(c.Acl, "unable to create request", c, err)
+	} else if req.Http().Native().Header.Set("Depth", string(depth)); depth == "" {
+		return utils.NewError(c.Acl, "search depth must be defined", c, nil)
+	} else if _, err := c.Do(req); err == nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) Bind(path string, depth Depth, bind *entities.Bind) error {
+	if req, err := c.Server().NewRequest("BIND", path, bind); err != nil {
+		return utils.NewError(c.Bind, "unable to create request", c, err)
+	} else if req.Http().Native().Header.Set("Depth", string(depth)); depth == "" {
+		return utils.NewError(c.Bind, "search depth must be defined", c, nil)
+	} else if _, err := c.Do(req); err == nil {
+		return err
+	}
+	return nil
+}
+
 // creates a new client for communicating with an WebDAV server
 func NewClient(server *Server, native *nhttp.Client) *Client {
 	return (*Client)(http.NewClient((*http.Server)(server), native))

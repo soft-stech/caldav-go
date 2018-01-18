@@ -80,8 +80,11 @@ func (c *Contact) DecodeICalParams(params properties.Params) error {
 			break
 		}
 	}
-	if partstat, found := params[properties.ParticipationStatusName]; found {
-		c.Status = partstat
+	for _, param := range params {
+		if param.Name == properties.ParticipationStatusName {
+			c.Status = param.Value
+			break
+		}
 	}
 	return nil
 }

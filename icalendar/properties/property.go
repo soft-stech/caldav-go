@@ -6,8 +6,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/heindl/caldav-go/utils"
-
 	"github.com/antony360/caldav-go/utils"
 )
 

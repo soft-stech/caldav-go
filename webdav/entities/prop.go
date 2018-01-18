@@ -10,6 +10,8 @@ type Prop struct {
 	GetContentType       string        `xml:"getcontenttype,omitempty"`
 	DisplayName          string        `xml:"displayname,omitempty"`
 	ResourceType         *ResourceType `xml:",omitempty"`
+	GroupMemberSet       []string      `xml:"group-member-set>href"`
+	PrincipalGroups      []string      `xml:"group-membership>href"`
 	CurrentUserPrincipal *Principal    `xml:"current-user-principal,omitempty"`
 	CTag                 string        `xml:"http://calendarserver.org/ns/ getctag,omitempty"`
 	ETag                 string        `xml:"http://calendarserver.org/ns/ getetag,omitempty"`

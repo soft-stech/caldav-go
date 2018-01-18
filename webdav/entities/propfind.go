@@ -35,3 +35,19 @@ func NewDisplayNamePropFind() *Propfind {
 		}},
 	}
 }
+
+func NewGroupMemberSetPropFind() *Propfind {
+	return &Propfind{
+		Props: []*Prop{{
+			GroupMemberSet: []string{},
+		}},
+	}
+}
+
+func NewPrincipalGroupsPropFind() *Propfind {
+	return &Propfind{
+		Props: []*Prop{{
+			PrincipalGroups: []string{},
+		}},
+	}
+}
