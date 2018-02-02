@@ -104,6 +104,10 @@ func (c *Client) Delete(path string) error {
 	return c.WebDAV().Delete(path)
 }
 
+func (c *Client) Exists(path string) (bool, error) {
+	return c.WebDAV().Exists(path)
+}
+
 // creates a new calendar collection on a given path
 func (c *Client) MakeCalendar(path string) error {
 	if req, err := c.Server().NewRequest("MKCALENDAR", path); err != nil {
