@@ -12,6 +12,7 @@ type Prop struct {
 	ResourceType         *ResourceType `xml:",omitempty"`
 	GroupMemberSet       []string      `xml:"group-member-set>href"`
 	PrincipalGroups      []string      `xml:"group-membership>href"`
+	ParentSet            []string      `xml:"parent-set>parent>segment"`
 	CurrentUserPrincipal *Principal    `xml:"current-user-principal,omitempty"`
 	CTag                 string        `xml:"http://calendarserver.org/ns/ getctag,omitempty"`
 	ETag                 string        `xml:"http://calendarserver.org/ns/ getetag,omitempty"`

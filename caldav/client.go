@@ -82,6 +82,16 @@ func (c *Client) GetGroupMembers(path string) ([]string, error) {
 	}
 }
 
+func (c *Client) GetResourceBindings(path string) ([]string, error) {
+	var props []*entities.Prop
+	props = append(props, &entities.Prop{})
+	if ms, err := c.WebDAV().Propfind(path, webdav.Depth0, entities.NewParentSetPropFind()); err != nil {
+		return []string{}, utils.NewError(c.GetResourceBindings, "unable to create request", c, err)
+	} else {
+		return ms.Responses[0].PropStats[0].Prop.ParentSet, nil
+	}
+}
+
 func (c *Client) GetPrincipalGroups(path string) ([]string, error) {
 	var props []*entities.Prop
 	props = append(props, &entities.Prop{})
