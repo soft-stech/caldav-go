@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/antony360/caldav-go/icalendar/properties"
-	"github.com/antony360/caldav-go/utils"
+	"github.com/iPaladinLLC/caldav-go/icalendar/properties"
+	"github.com/iPaladinLLC/caldav-go/utils"
 )
 
 var _ = log.Print

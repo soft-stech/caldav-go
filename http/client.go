@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/antony360/caldav-go/utils"
+	"github.com/iPaladinLLC/caldav-go/utils"
 )
 
 // a client for making HTTP requests

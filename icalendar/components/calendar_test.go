@@ -3,7 +3,7 @@ package components
 import (
 	"testing"
 
-	"github.com/antony360/caldav-go/icalendar"
+	"github.com/iPaladinLLC/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
 )
 
@@ -17,5 +17,5 @@ func TestCalendar(t *testing.T) { TestingT(t) }
 func (s *CalendarSuite) TestMarshal(c *C) {
 	enc, err := icalendar.Marshal(s.calendar)
 	c.Assert(err, IsNil)
-	c.Assert(enc, Equals, "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//antony360/caldav-go//NONSGML v1.0.0//EN\r\nEND:VCALENDAR")
+	c.Assert(enc, Equals, "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//iPaladinLLC/caldav-go//NONSGML v1.0.0//EN\r\nEND:VCALENDAR")
 }

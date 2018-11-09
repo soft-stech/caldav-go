@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/antony360/caldav-go/icalendar"
+	"github.com/iPaladinLLC/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
 	"testing"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/antony360/caldav-go/icalendar/properties"
+	"github.com/iPaladinLLC/caldav-go/icalendar/properties"
 )
 
 type ContactName struct {

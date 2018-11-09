@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/antony360/caldav-go/utils"
+	"github.com/iPaladinLLC/caldav-go/utils"
 )
 
 var _ = log.Print

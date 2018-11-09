@@ -8,8 +8,8 @@ import (
 
 	"strings"
 
-	"github.com/antony360/caldav-go/icalendar"
-	"github.com/antony360/caldav-go/icalendar/values"
+	"github.com/iPaladinLLC/caldav-go/icalendar"
+	"github.com/iPaladinLLC/caldav-go/icalendar/values"
 	. "gopkg.in/check.v1"
 )
 
@@ -36,7 +36,7 @@ func (s *CardSuite) TestMarshalCard(c *C) {
 	c.Assert(err, IsNil)
 	fmt.Println(enc)
 	c.Assert(enc, Equals,
-		"BEGIN:VCARD\r\nVERSION:3.0\r\nUID:229CD09F-7FCB-4873-88DC-E16D568D8B50\r\nPRODID:-//antony360/caldav-go//NONSGML v1.0.0//EN\r\nN:Doe;Frank;;;\r\nORG:DOE Enterprise;Management\r\nFN:Frank Doe\r\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:111 222 333\r\nTEL;TYPE=WORK;TYPE=VOICE:111 333 444\r\nTEL;TYPE=MAIN:111 444 555\r\nEMAIL;TYPE=WORK;TYPE=INTERNET;TYPE=pref:frank.doe@example.com\r\nEMAIL;TYPE=WORK;TYPE=INTERNET:frank.doo@example.com\r\nEND:VCARD")
+		"BEGIN:VCARD\r\nVERSION:3.0\r\nUID:229CD09F-7FCB-4873-88DC-E16D568D8B50\r\nPRODID:-//iPaladinLLC/caldav-go//NONSGML v1.0.0//EN\r\nN:Doe;Frank;;;\r\nORG:DOE Enterprise;Management\r\nFN:Frank Doe\r\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:111 222 333\r\nTEL;TYPE=WORK;TYPE=VOICE:111 333 444\r\nTEL;TYPE=MAIN:111 444 555\r\nEMAIL;TYPE=WORK;TYPE=INTERNET;TYPE=pref:frank.doe@example.com\r\nEMAIL;TYPE=WORK;TYPE=INTERNET:frank.doo@example.com\r\nEND:VCARD")
 }
 
 func (s *CardSuite) TestUnmarshalCard(c *C) {

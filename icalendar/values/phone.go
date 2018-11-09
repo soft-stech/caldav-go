@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/antony360/caldav-go/icalendar/properties"
+	"github.com/iPaladinLLC/caldav-go/icalendar/properties"
 	"strings"
 )
 

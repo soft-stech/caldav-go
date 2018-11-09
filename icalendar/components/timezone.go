@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/antony360/caldav-go/icalendar/values"
+	"github.com/iPaladinLLC/caldav-go/icalendar/values"
 )
 
 type TimeZone struct {

@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/antony360/caldav-go/icalendar"
-	"github.com/antony360/caldav-go/utils"
-	"github.com/antony360/caldav-go/webdav"
+	"github.com/iPaladinLLC/caldav-go/icalendar"
+	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/iPaladinLLC/caldav-go/webdav"
 )
 
 var _ = log.Print

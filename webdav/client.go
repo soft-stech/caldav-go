@@ -4,9 +4,9 @@ import (
 	"fmt"
 	nhttp "net/http"
 
-	"github.com/antony360/caldav-go/http"
-	"github.com/antony360/caldav-go/utils"
-	"github.com/antony360/caldav-go/webdav/entities"
+	"github.com/iPaladinLLC/caldav-go/http"
+	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/iPaladinLLC/caldav-go/webdav/entities"
 )
 
 const (
