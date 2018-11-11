@@ -72,7 +72,7 @@ func NewDateTimes(dates ...*DateTime) DateTimes {
 
 // creates a new icalendar datetime representation
 func NewDateTimeFullDay(t time.Time) *DateTimeFullDay {
-	datetimes := NewDateTime(t)
+	datetimes := NewDateTimeDate(t)
 	return (*DateTimeFullDay)(datetimes)
 }
 
