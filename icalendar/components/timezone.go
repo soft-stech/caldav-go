@@ -24,8 +24,26 @@ type TimeZone struct {
 	// Note: This is analogous to the modification date and time for a file in the file system.
 	LastModified *values.DateTime `ical:"last-modified,omitempty"`
 
-	// TODO need to figure out how to handle standard and daylight savings time
+	Daylight []*Daylight `ical:",omitempty"`
+	Standard []*Standard `ical:",omitempty"`
+}
 
+type Daylight struct {
+	DateStart    *values.DateTime            `ical:"dtstart,omitempty"`
+	RDates       *values.RecurrenceDateTimes `ical:",omitempty"`
+	TzName       string                      `ical:"tzname,omitempty"`
+	TzOffsetFrom string                      `ical:tzoffsetfrom,omitempty`
+	TzOffsetTo   string                      `ical:tzoffsetto,omitempty`
+}
+
+func (*Daylight) EncodeICalTag() (string, error) {
+	return "DAYLIGHT", nil
+}
+
+type Standard Daylight
+
+func (*Standard) EncodeICalTag() (string, error) {
+	return "STANDARD", nil
 }
 
 func NewDynamicTimeZone(location *time.Location) *TimeZone {

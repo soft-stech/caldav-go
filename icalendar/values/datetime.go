@@ -19,8 +19,9 @@ const UTCDateTimeFormatString = "20060102T150405Z"
 
 // a representation of a date and time for iCalendar
 type DateTime struct {
-	t        time.Time
-	fullTime bool
+	t          time.Time
+	fullTime   bool
+	SkipAddUTC bool // if true, don't add trailing "Z" for UTC times
 }
 
 type DateTimeFullDay DateTime
@@ -104,7 +105,7 @@ func (d *DateTime) EncodeICalValue() (string, error) {
 	if d.fullTime {
 		val = d.t.Format(DateTimeFormatString)
 		loc := d.t.Location()
-		if loc == time.UTC {
+		if loc == time.UTC && !d.SkipAddUTC {
 			val = fmt.Sprintf("%sZ", val)
 		}
 	} else {
@@ -216,7 +217,7 @@ func (d *DateTime) String() string {
 func (d *DateTimeFullDay) EncodeICalValue() (string, error) {
 	val := d.t.Format(DateFormatString)
 	loc := d.t.Location()
-	if loc == time.UTC {
+	if loc == time.UTC && !d.SkipAddUTC {
 		val = fmt.Sprintf("%sZ", val)
 	}
 	return val, nil
