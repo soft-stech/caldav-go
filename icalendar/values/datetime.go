@@ -121,8 +121,11 @@ func (d *DateTime) DecodeICalValue(value string) error {
 	d.fullTime = true
 	if strings.HasSuffix(value, "Z") {
 		layout = UTCDateTimeFormatString
+	} else if len(value) == 15 {
+		layout = DateTimeFormatString
 	} else if len(value) == 8 {
 		layout = DateFormatString
+		d.fullTime = false
 	}
 	var err error
 	d.t, err = time.ParseInLocation(layout, value, time.UTC)
