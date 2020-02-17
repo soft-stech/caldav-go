@@ -205,6 +205,10 @@ func hydrateProperty(v reflect.Value, prop *properties.Property) error {
 	// make sure we can set the new value into the provided pointer
 
 	if varr {
+		// check if array element type is a reference
+		if voldval.Type().Elem() == vnew.Type() {
+			vnewval = vnew
+		}
 		// for arrays, append the new value into the array structure
 		if !voldval.CanSet() {
 			return utils.NewError(hydrateProperty, "unable to set array value", v, nil)

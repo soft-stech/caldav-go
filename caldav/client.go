@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	guuid "github.com/google/uuid"
 	cent "github.com/pauldemarco/caldav-go/caldav/entities"
 	"github.com/pauldemarco/caldav-go/icalendar/components"
 	"github.com/pauldemarco/caldav-go/icalendar/values"
@@ -254,10 +255,11 @@ func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*
 }
 
 // attempts to fetch an event on the remote CalDAV server
-func (c *Client) QueryFreeBusy(path string, uuid string, start time.Time, end time.Time, emails []string) (calendars []*components.Calendar, oerr error) {
+func (c *Client) QueryFreeBusy(start time.Time, end time.Time, emails []string) (calendars []*components.Calendar, oerr error) {
 	cal := new(components.Calendar)
 
 	cal.Method = "REQUEST"
+	uuid := guuid.New().String()
 	freeBusy := components.NewFreeBusyWithEnd(uuid, start, end)
 
 	var attendees []*values.AttendeeContact
@@ -269,9 +271,11 @@ func (c *Client) QueryFreeBusy(path string, uuid string, start time.Time, end ti
 	freeBusy.Organizer = values.NewOrganizerContact("Admin", "admin@example.com")
 	cal.FreeBusy = freeBusy
 
+	path := "/caldav.php/admin/calendar"
+
 	// Split out request for debugging purposes (can be run through POSTMAN):
-	// rr, _ := c.Server().NewRequest("POST", path, cal)
-	// fmt.Printf("rr: %+v\r\n", rr)
+	rr, _ := c.Server().NewRequest("POST", path, cal)
+	fmt.Printf("rr: %+v\r\n", rr)
 
 	schedResponse := new(cent.ScheduleResponse)
 

@@ -30,7 +30,7 @@ type FreeBusy struct {
 	Attendees []*values.AttendeeContact `ical:"attendee,omitempty"`
 
 	// free busy entries
-	FreeBusy []string `ical:"freebusy,omitempty"`
+	FreeBusy []*string `ical:"freebusy,omitempty"`
 }
 
 // validates the FreeBusy internals
