@@ -31,6 +31,9 @@ type Calendar struct {
 
 	// unique events to be stored together in the icalendar file
 	Events []*Event `ical:",omitempty"`
+
+	// free busy entries
+	FreeBusy *FreeBusy `ical:",omitempty"`
 }
 
 func (c *Calendar) UseTimeZone(location *time.Location) *TimeZone {

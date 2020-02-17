@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	cent "github.com/pauldemarco/caldav-go/caldav/entities"
 	"github.com/pauldemarco/caldav-go/icalendar/components"
+	"github.com/pauldemarco/caldav-go/icalendar/values"
 	"github.com/pauldemarco/caldav-go/utils"
 	"github.com/pauldemarco/caldav-go/webdav"
 	"github.com/pauldemarco/caldav-go/webdav/entities"
@@ -249,6 +251,52 @@ func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*
 		}
 	}
 	return
+}
+
+// attempts to fetch an event on the remote CalDAV server
+func (c *Client) QueryFreeBusy(path string, uuid string, start time.Time, end time.Time, emails []string) (calendars []*components.Calendar, oerr error) {
+	cal := new(components.Calendar)
+
+	cal.Method = "REQUEST"
+	freeBusy := components.NewFreeBusyWithEnd(uuid, start, end)
+
+	var attendees []*values.AttendeeContact
+	for _, e := range emails {
+		a := values.NewAttendeeContact("Placeholder", e)
+		attendees = append(attendees, a)
+	}
+	freeBusy.Attendees = attendees
+	freeBusy.Organizer = values.NewOrganizerContact("Admin", "admin@example.com")
+	cal.FreeBusy = freeBusy
+
+	// Split out request for debugging purposes (can be run through POSTMAN):
+	// rr, _ := c.Server().NewRequest("POST", path, cal)
+	// fmt.Printf("rr: %+v\r\n", rr)
+
+	schedResponse := new(cent.ScheduleResponse)
+
+	if req, err := c.Server().NewRequest("POST", path, cal); err != nil {
+		return nil, utils.NewError(c.GetEvents, "unable to create request", c, err)
+	} else if resp, err := c.Do(req); err != nil {
+		return nil, utils.NewError(c.GetEvents, "unable to execute request", c, err)
+	} else if resp.StatusCode != http.StatusOK {
+		err := new(entities.Error)
+		resp.Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return nil, utils.NewError(c.GetEvents, msg, c, err)
+	} else if err := resp.WebDAV().Decode(schedResponse); err != nil {
+		msg := "unable to decode response"
+		return nil, utils.NewError(c.QueryEvents, msg, c, err)
+	} else {
+		for _, r := range schedResponse.Responses {
+			if cal, err := r.CalendarData.CalendarComponent(); err != nil {
+				return nil, fmt.Errorf("unable to get calendar component: %v", err)
+			} else {
+				calendars = append(calendars, cal)
+			}
+		}
+	}
+	return calendars, oerr
 }
 
 // executes a CalDAV request
