@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/utils"
 )
 
 // an HTTP request object

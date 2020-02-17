@@ -2,9 +2,9 @@ package entities
 
 import (
 	"encoding/xml"
-	"github.com/iPaladinLLC/caldav-go/icalendar"
-	"github.com/iPaladinLLC/caldav-go/icalendar/components"
-	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/icalendar"
+	"github.com/pauldemarco/caldav-go/icalendar/components"
+	"github.com/pauldemarco/caldav-go/utils"
 	"strings"
 )
 

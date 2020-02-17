@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	cent "github.com/iPaladinLLC/caldav-go/caldav/entities"
-	"github.com/iPaladinLLC/caldav-go/icalendar/components"
-	"github.com/iPaladinLLC/caldav-go/utils"
-	"github.com/iPaladinLLC/caldav-go/webdav"
-	"github.com/iPaladinLLC/caldav-go/webdav/entities"
+	cent "github.com/pauldemarco/caldav-go/caldav/entities"
+	"github.com/pauldemarco/caldav-go/icalendar/components"
+	"github.com/pauldemarco/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/webdav"
+	"github.com/pauldemarco/caldav-go/webdav/entities"
 )
 
 var _ = log.Print

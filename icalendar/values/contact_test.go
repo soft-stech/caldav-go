@@ -3,10 +3,10 @@ package values
 import (
 	"testing"
 
-	"github.com/rsniezynski/caldav-go/icalendar"
+	"github.com/pauldemarco/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
 
-	"github.com/iPaladinLLC/caldav-go/icalendar"
+	"github.com/pauldemarco/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
 )
 

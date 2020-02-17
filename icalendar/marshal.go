@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/iPaladinLLC/caldav-go/icalendar/properties"
-	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/icalendar/properties"
+	"github.com/pauldemarco/caldav-go/utils"
 )
 
 const (

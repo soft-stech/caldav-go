@@ -2,10 +2,10 @@ package carddav
 
 import (
 	"bytes"
-	"github.com/iPaladinLLC/caldav-go/http"
-	"github.com/iPaladinLLC/caldav-go/icalendar"
-	"github.com/iPaladinLLC/caldav-go/utils"
-	"github.com/iPaladinLLC/caldav-go/webdav"
+	"github.com/pauldemarco/caldav-go/http"
+	"github.com/pauldemarco/caldav-go/icalendar"
+	"github.com/pauldemarco/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/webdav"
 	"io"
 	"io/ioutil"
 	"log"

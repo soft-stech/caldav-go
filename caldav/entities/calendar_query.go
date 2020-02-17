@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"time"
 
-	"github.com/iPaladinLLC/caldav-go/caldav/values"
-	"github.com/iPaladinLLC/caldav-go/utils"
-	"github.com/iPaladinLLC/caldav-go/webdav/entities"
+	"github.com/pauldemarco/caldav-go/caldav/values"
+	"github.com/pauldemarco/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/webdav/entities"
 )
 
 // a CalDAV calendar query object
@@ -15,6 +15,26 @@ type CalendarQuery struct {
 	Prop    *Prop             `xml:",omitempty"`
 	AllProp *entities.AllProp `xml:",omitempty"`
 	Filter  *Filter           `xml:",omitempty"`
+}
+
+func NewEventQuery() *CalendarQuery {
+	// construct the query object
+	query := new(CalendarQuery)
+
+	// request all calendar data
+	query.Prop = new(Prop)
+	query.Prop.CalendarData = new(CalendarData)
+
+	// filter down calendar data to only iCalendar data
+	query.Filter = new(Filter)
+	query.Filter.ComponentFilter = new(ComponentFilter)
+	query.Filter.ComponentFilter.Name = values.CalendarComponentName
+
+	// filter down iCalendar data to only events
+	query.Filter.ComponentFilter.ComponentFilter = new(ComponentFilter)
+	query.Filter.ComponentFilter.ComponentFilter.Name = values.EventComponentName
+
+	return query
 }
 
 // creates a new CalDAV query for iCalendar events from a particular time range
@@ -29,25 +49,12 @@ func NewEventRangeQuery(start, end time.Time) (*CalendarQuery, error) {
 	}
 
 	// construct the query object
-	query := new(CalendarQuery)
-
-	// request all calendar data
-	query.Prop = new(Prop)
-	query.Prop.CalendarData = new(CalendarData)
+	query := NewEventQuery()
 
 	// expand recurring events
 	query.Prop.CalendarData.ExpandRecurrenceSet = new(ExpandRecurrenceSet)
 	query.Prop.CalendarData.ExpandRecurrenceSet.StartTime = dtstart
 	query.Prop.CalendarData.ExpandRecurrenceSet.EndTime = dtend
-
-	// filter down calendar data to only iCalendar data
-	query.Filter = new(Filter)
-	query.Filter.ComponentFilter = new(ComponentFilter)
-	query.Filter.ComponentFilter.Name = values.CalendarComponentName
-
-	// filter down iCalendar data to only events
-	query.Filter.ComponentFilter.ComponentFilter = new(ComponentFilter)
-	query.Filter.ComponentFilter.ComponentFilter.Name = values.EventComponentName
 
 	// filter down the events to only those that fall within the time range
 	query.Filter.ComponentFilter.ComponentFilter.TimeRange = new(TimeRange)
@@ -69,20 +76,7 @@ func NewSimpleEventRangeQuery(start, end time.Time) (*CalendarQuery, error) {
 	}
 
 	// construct the query object
-	query := new(CalendarQuery)
-
-	// request all calendar data
-	query.Prop = new(Prop)
-	query.Prop.CalendarData = new(CalendarData)
-
-	// filter down calendar data to only iCalendar data
-	query.Filter = new(Filter)
-	query.Filter.ComponentFilter = new(ComponentFilter)
-	query.Filter.ComponentFilter.Name = values.CalendarComponentName
-
-	// filter down iCalendar data to only events
-	query.Filter.ComponentFilter.ComponentFilter = new(ComponentFilter)
-	query.Filter.ComponentFilter.ComponentFilter.Name = values.EventComponentName
+	query := NewEventQuery()
 
 	// filter down the events to only those that fall within the time range
 	query.Filter.ComponentFilter.ComponentFilter.TimeRange = new(TimeRange)

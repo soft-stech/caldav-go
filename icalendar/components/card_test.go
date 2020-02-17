@@ -8,8 +8,8 @@ import (
 
 	"strings"
 
-	"github.com/iPaladinLLC/caldav-go/icalendar"
-	"github.com/iPaladinLLC/caldav-go/icalendar/values"
+	"github.com/pauldemarco/caldav-go/icalendar"
+	"github.com/pauldemarco/caldav-go/icalendar/values"
 	. "gopkg.in/check.v1"
 )
 
@@ -175,7 +175,6 @@ END:VCARD`
 	}
 
 }
-
 
 func (s *CardSuite) TestLargeAmountCars(c *C) {
 	example := `BEGIN:VCARD

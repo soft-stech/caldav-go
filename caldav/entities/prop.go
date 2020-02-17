@@ -3,7 +3,7 @@ package entities
 import (
 	"encoding/xml"
 
-	"github.com/iPaladinLLC/caldav-go/webdav/entities"
+	"github.com/pauldemarco/caldav-go/webdav/entities"
 )
 
 // a CalDAV Property resource

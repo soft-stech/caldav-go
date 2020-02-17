@@ -3,7 +3,7 @@ package components
 import (
 	"strings"
 
-	"github.com/iPaladinLLC/caldav-go/icalendar/values"
+	"github.com/pauldemarco/caldav-go/icalendar/values"
 )
 
 const (

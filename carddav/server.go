@@ -1,8 +1,8 @@
 package carddav
 
 import (
-	"github.com/iPaladinLLC/caldav-go/utils"
-	"github.com/iPaladinLLC/caldav-go/webdav"
+	"github.com/pauldemarco/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/webdav"
 )
 
 // a server that accepts CalDAV requests

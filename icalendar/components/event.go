@@ -3,8 +3,8 @@ package components
 import (
 	"time"
 
-	"github.com/iPaladinLLC/caldav-go/icalendar/values"
-	"github.com/iPaladinLLC/caldav-go/utils"
+	"github.com/pauldemarco/caldav-go/icalendar/values"
+	"github.com/pauldemarco/caldav-go/utils"
 )
 
 type Event struct {
