@@ -52,7 +52,7 @@ func (c *Contact) ValidateICalValue() error {
 
 // encodes the contact value for the iCalendar specification
 func (c *Contact) EncodeICalValue() (string, error) {
-	return fmt.Sprintf("MAILTO:%s", c.Entry.Address), nil
+	return fmt.Sprintf("mailto:%s", c.Entry.Address), nil
 }
 
 // encodes the contact params for the iCalendar specification
