@@ -106,7 +106,7 @@ func (s *ClientSuite) TestRecurringEventQuery(c *C) {
 	// create a query for all events between one week out + days in range
 	daysInRange := 2
 	nextWeekEnd := nextWeek.AddDate(0, 0, daysInRange)
-	query, err := calentities.NewEventRangeQuery(nextWeek, nextWeekEnd)
+	query, err := calentities.NewEventRangeQuery(nextWeek, nextWeekEnd, false)
 	if err != nil {
 		c.Fatal(err.Error())
 	}

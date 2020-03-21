@@ -38,7 +38,7 @@ func NewEventQuery() *CalendarQuery {
 }
 
 // creates a new CalDAV query for iCalendar events from a particular time range
-func NewEventRangeQuery(start, end time.Time) (*CalendarQuery, error) {
+func NewEventRangeQuery(start, end time.Time, singleEvents bool) (*CalendarQuery, error) {
 
 	var err error
 	var dtstart, dtend *values.DateTime
@@ -52,9 +52,11 @@ func NewEventRangeQuery(start, end time.Time) (*CalendarQuery, error) {
 	query := NewEventQuery()
 
 	// expand recurring events
-	query.Prop.CalendarData.ExpandRecurrenceSet = new(ExpandRecurrenceSet)
-	query.Prop.CalendarData.ExpandRecurrenceSet.StartTime = dtstart
-	query.Prop.CalendarData.ExpandRecurrenceSet.EndTime = dtend
+	if singleEvents {
+		query.Prop.CalendarData.ExpandRecurrenceSet = new(ExpandRecurrenceSet)
+		query.Prop.CalendarData.ExpandRecurrenceSet.StartTime = dtstart
+		query.Prop.CalendarData.ExpandRecurrenceSet.EndTime = dtend
+	}
 
 	// filter down the events to only those that fall within the time range
 	query.Filter.ComponentFilter.ComponentFilter.TimeRange = new(TimeRange)
