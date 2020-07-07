@@ -238,6 +238,9 @@ SUMMARY:Brand Presentation
 TRANSP:OPAQUE
 END:VEVENT`
 
+	e := Event{}
+	err := icalendar.Unmarshal(raw, &e)
+	c.Assert(err, IsNil)
 	c.Assert(len(e.Attendees), Equals, 1)
 	c.Assert(e.Attendees[0].Entry.Address, Equals, "fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikmaeq8@group.calendar.google.com")
 	c.Assert(e.Attendees[0].Entry.Name, Equals, "Fakebiz Shared")
