@@ -58,8 +58,8 @@ func (s *FreeBusySuite) TestFullFreeBusyMarshal(c *C) {
 		c.Fatal(err.Error())
 	}
 	tmpl := "BEGIN:VFREEBUSY\r\nUID:1:2:3\r\nDTSTAMP:%sZ\r\nDTSTART:%sZ\r\nDTEND:%sZ\r\n" +
-		"ORGANIZER;CN=\"Jon Azoff\":MAILTO:jon@dolanor.com\r\n" +
-		"ATTENDEE;CN=\"Jon Azoff\":MAILTO:jon@dolanor.com\r\nATTENDEE;CN=\"Matthew Davie\":MAILTO:matthew@dolanor.com\r\n" +
+		"ORGANIZER;CN=\"Jon Azoff\":mailto:jon@dolanor.com\r\n" +
+		"ATTENDEE;CN=\"Jon Azoff\":mailto:jon@dolanor.com\r\nATTENDEE;CN=\"Matthew Davie\":mailto:matthew@dolanor.com\r\n" +
 		"END:VFREEBUSY"
 	sdate := now.Format(values.DateTimeFormatString)
 	edate := end.Format(values.DateTimeFormatString)

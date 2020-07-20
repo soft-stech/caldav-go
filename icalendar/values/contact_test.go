@@ -5,9 +5,6 @@ import (
 
 	"github.com/pauldemarco/caldav-go/icalendar"
 	. "gopkg.in/check.v1"
-
-	"github.com/pauldemarco/caldav-go/icalendar"
-	. "gopkg.in/check.v1"
 )
 
 type ContactSuite struct{}

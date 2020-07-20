@@ -106,7 +106,7 @@ func (s *ClientSuite) TestRecurringEventQuery(c *C) {
 	// create a query for all events between one week out + days in range
 	daysInRange := 2
 	nextWeekEnd := nextWeek.AddDate(0, 0, daysInRange)
-	query, err := calentities.NewEventRangeQuery(nextWeek, nextWeekEnd, false)
+	query, err := calentities.NewEventRangeQuery(nextWeek, nextWeekEnd, true)
 	if err != nil {
 		c.Fatal(err.Error())
 	}
@@ -119,30 +119,28 @@ func (s *ClientSuite) TestRecurringEventQuery(c *C) {
 	if events, err := s.client.QueryEvents("/", query); err != nil {
 		c.Fatal(err.Error())
 	} else {
-		// since this is a daily recurring event, we should only get back one event for every day in our range
-		c.Assert(events, HasLen, daysInRange)
-		for i, event := range events {
-
+		// since this is a daily recurring event, we should only get back one event for every day in our range, plus the one on the last day since it's inclusive
+		expectedCount := daysInRange + 1
+		c.Assert(events, HasLen, expectedCount)
+		j := 0
+		for _, event := range events {
 			// all events should have the same UID
 			c.Assert(event.UID, Equals, uid)
 
-			// all events should have a consistant recurrence ID
-			day := nextWeek.AddDate(0, 0, i)
-			offset := values.NewDateTime(day)
-			c.Assert(event.RecurrenceId, DeepEquals, offset)
-
-			if i == 0 {
-				// the first event is an override, it should start an hour later and be twice as long
+			if event.DateStart.Equals(overrideEvent.DateStart) {
 				c.Assert(event.DateStart, DeepEquals, overrideEvent.DateStart)
 				c.Assert(event.Duration, DeepEquals, overrideEvent.Duration)
 				c.Assert(event.Summary, DeepEquals, overrideEvent.Summary)
+				j++
 			} else {
-				// regular occurences should start at the same time as their recurrence ID
+				// regular occurrences should start at the same time as their recurrence ID
 				c.Assert(event.DateStart, DeepEquals, event.RecurrenceId)
 				c.Assert(event.Duration, DeepEquals, putEvent.Duration)
 				c.Assert(event.Summary, DeepEquals, putEvent.Summary)
+				j++
 			}
 		}
+		c.Assert(j, Equals, expectedCount)
 	}
 
 }
