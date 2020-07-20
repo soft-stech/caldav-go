@@ -85,8 +85,20 @@ END:VFREEBUSY`
 	e := FreeBusy{}
 	err := icalendar.Unmarshal(raw, &e)
 	c.Assert(err, IsNil)
-	c.Assert(len(e.FreeBusy), Equals, 2)
+	c.Assert(len(e.FreeBusyItems), Equals, 2)
 	c.Assert(len(e.Attendees), Equals, 1)
+	start1 := values.DateTime{}
+	start1.DecodeICalValue("20200214T022955Z")
+	end1 := values.DateTime{}
+	end1.DecodeICalValue("20200214T032955Z")
+	c.Assert(e.FreeBusyItems[0].Start, Equals, start1)
+	c.Assert(e.FreeBusyItems[0].End, Equals, end1)
+	start2 := values.DateTime{}
+	start2.DecodeICalValue("20200216T071500Z")
+	end2 := values.DateTime{}
+	end2.DecodeICalValue("20200216T081500Z")
+	c.Assert(e.FreeBusyItems[1].Start, Equals, start2)
+	c.Assert(e.FreeBusyItems[1].End, Equals, end2)
 	c.Assert(e.Attendees[0].Entry.Address, Equals, "fakemcfakebiz.com_b3a0grbjdr4dcje2fc4ikmaeq8@group.calendar.google.com")
 	c.Assert(e.Attendees[0].Entry.Name, Equals, "Fakebiz Shared")
 }

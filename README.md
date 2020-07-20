@@ -53,5 +53,11 @@ HTTP Basic authentication can be baked into the URL as well:
 CALDAV_SERVER_URL='http://admin:admin@localhost:8008/calendars/users/admin/calendar/' go test ./...
 ```
 
+Example using Davical:
+
+```sh
+CALDAV_SERVER_URL='http://admin:12345@localhost:5001/caldav.php/mark/calendar/' go test ./...
+```
+
 [1]:http://tools.ietf.org/html/rfc4791
 [2]:http://calendarserver.org/

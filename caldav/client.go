@@ -274,8 +274,8 @@ func (c *Client) QueryFreeBusy(start time.Time, end time.Time, emails []string) 
 	path := "/caldav.php/admin/calendar"
 
 	// Split out request for debugging purposes (can be run through POSTMAN):
-	rr, _ := c.Server().NewRequest("POST", path, cal)
-	fmt.Printf("rr: %+v\r\n", rr)
+	//rr, _ := c.Server().NewRequest("POST", path, cal)
+	//fmt.Printf("rr: %+v\r\n", rr)
 
 	schedResponse := new(cent.ScheduleResponse)
 

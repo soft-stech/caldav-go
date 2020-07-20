@@ -142,7 +142,47 @@ func (s *ClientSuite) TestRecurringEventQuery(c *C) {
 		}
 		c.Assert(j, Equals, expectedCount)
 	}
+}
 
+func (s *ClientSuite) TestFreeBusyQuery(c *C) {
+
+	// create the master event object
+	start := time.Now().Truncate(time.Hour).UTC()
+	uid := fmt.Sprintf("test-recurring-event-%d", start.Unix())
+	putEvent := components.NewEventWithDuration(uid, start, time.Hour)
+	putEvent.Summary = "This is a test recurring event"
+	rule := values.NewRecurrenceRule(values.DayRecurrenceFrequency)
+	rule.Count = 14 // two weeks of events
+	putEvent.AddRecurrenceRules(rule)
+
+	// generate an ICS filepath
+	path := fmt.Sprintf("/%s.ics", uid)
+
+	// save the events to the server
+	if err := s.client.PutEvents(path, putEvent); err != nil {
+		c.Fatal(err.Error())
+	}
+
+	// check availability of a 15 minute window that's during an occurrence a week from now
+	nextWeek := start.AddDate(0, 0, 7)
+	nextWeekEndTime := nextWeek.Add(time.Hour)
+	after := nextWeek.Add(time.Minute * 30)
+	until := after.Add(time.Minute * 15)
+
+	// send the query to the server
+	if cals, err := s.client.QueryFreeBusy(after, until, []string{"bill@example.com", "mark@example.com"}); err != nil {
+		c.Fatal(err.Error())
+	} else {
+		for _, cal := range cals {
+			fmt.Printf("cal: %+v\n\n", cal)
+			fmt.Printf("freebusy: %+v\n\n", cal.FreeBusy)
+			for _, fb := range cal.FreeBusy.FreeBusyItems {
+				c.Assert(fb.Start.NativeTime(), Equals, nextWeek)
+				c.Assert(fb.End.NativeTime(), Equals, nextWeekEndTime)
+				fmt.Printf("freebusyitems: %+v\n\n", fb.Start.NativeTime())
+			}
+		}
+	}
 }
 
 func (s *ClientSuite) TestResetCalendar(c *C) {
