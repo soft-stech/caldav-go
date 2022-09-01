@@ -2,11 +2,12 @@ package components
 
 import (
 	"fmt"
-	"github.com/pauldemarco/caldav-go/icalendar"
-	"github.com/pauldemarco/caldav-go/icalendar/values"
-	. "gopkg.in/check.v1"
 	"testing"
 	"time"
+
+	"github.com/soft-stech/caldav-go/icalendar"
+	"github.com/soft-stech/caldav-go/icalendar/values"
+	. "gopkg.in/check.v1"
 )
 
 type FreeBusySuite struct{}

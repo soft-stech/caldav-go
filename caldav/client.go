@@ -8,12 +8,12 @@ import (
 	"time"
 
 	guuid "github.com/google/uuid"
-	cent "github.com/pauldemarco/caldav-go/caldav/entities"
-	"github.com/pauldemarco/caldav-go/icalendar/components"
-	"github.com/pauldemarco/caldav-go/icalendar/values"
-	"github.com/pauldemarco/caldav-go/utils"
-	"github.com/pauldemarco/caldav-go/webdav"
-	"github.com/pauldemarco/caldav-go/webdav/entities"
+	cent "github.com/soft-stech/caldav-go/caldav/entities"
+	"github.com/soft-stech/caldav-go/icalendar/components"
+	"github.com/soft-stech/caldav-go/icalendar/values"
+	"github.com/soft-stech/caldav-go/utils"
+	"github.com/soft-stech/caldav-go/webdav"
+	"github.com/soft-stech/caldav-go/webdav/entities"
 )
 
 var _ = log.Print

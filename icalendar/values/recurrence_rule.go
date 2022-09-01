@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pauldemarco/caldav-go/icalendar/properties"
-	"github.com/pauldemarco/caldav-go/utils"
+	"github.com/soft-stech/caldav-go/icalendar/properties"
+	"github.com/soft-stech/caldav-go/utils"
 )
 
 // The recurrence rule, if specified, is used in computing the recurrence set. The recurrence set is the complete set

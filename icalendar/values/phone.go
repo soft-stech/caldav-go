@@ -1,8 +1,9 @@
 package values
 
 import (
-	"github.com/pauldemarco/caldav-go/icalendar/properties"
 	"strings"
+
+	"github.com/soft-stech/caldav-go/icalendar/properties"
 )
 
 type Phone struct {

@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"time"
 
-	"github.com/pauldemarco/caldav-go/caldav/values"
-	"github.com/pauldemarco/caldav-go/utils"
-	"github.com/pauldemarco/caldav-go/webdav/entities"
+	"github.com/soft-stech/caldav-go/caldav/values"
+	"github.com/soft-stech/caldav-go/utils"
+	"github.com/soft-stech/caldav-go/webdav/entities"
 )
 
 // a CalDAV calendar query object

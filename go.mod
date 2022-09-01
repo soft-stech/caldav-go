@@ -1,4 +1,4 @@
-module github.com/pauldemarco/caldav-go
+module github.com/soft-stech/caldav-go
 
 go 1.13
 
