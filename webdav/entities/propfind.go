@@ -39,7 +39,7 @@ func NewDisplayNamePropFind() *Propfind {
 func NewParentSetPropFind() *Propfind {
 	return &Propfind{
 		Props: []*Prop{{
-			ParentSet: []string{},
+			ParentSet: &ParentSet{},
 		}},
 	}
 }

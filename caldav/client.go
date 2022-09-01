@@ -91,7 +91,15 @@ func (c *Client) GetResourceBindings(path string) ([]string, error) {
 	if ms, err := c.WebDAV().Propfind(path, webdav.Depth0, entities.NewParentSetPropFind()); err != nil {
 		return []string{}, utils.NewError(c.GetResourceBindings, "unable to create request", c, err)
 	} else {
-		return ms.Responses[0].PropStats[0].Prop.ParentSet, nil
+		parents := []string{}
+		ps := ms.Responses[0].PropStats[0].Prop.ParentSet
+		if ps != nil {
+			for _, p := range ps.Parent {
+				parents = append(parents, p.Segment)
+			}
+
+		}
+		return parents, nil
 	}
 }
 
