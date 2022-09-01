@@ -107,6 +107,11 @@ type Event struct {
 
 	// defines the equipment or resources anticipated for an activity specified by a calendar entity.
 	Resources *values.CSV `ical:",omitempty"`
+
+	// specifies a color used for displaying the event
+	Color string `ical:",omitempty"`
+
+	TextColor string `ical:"x-fullcalendar-text-color,omitempty"`
 }
 
 // validates the event internals
