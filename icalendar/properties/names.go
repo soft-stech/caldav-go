@@ -32,6 +32,7 @@ const (
 	AlternateRepresentationName               = "ALTREP"
 	ABLabel                                   = "X_ABLABEL"
 	ParticipationStatusName                   = "PARTSTAT"
+	EmailParameterName                        = "EMAIL"
 )
 
 type Param struct {

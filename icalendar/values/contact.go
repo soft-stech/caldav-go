@@ -86,6 +86,12 @@ func (c *Contact) DecodeICalParams(params properties.Params) error {
 			break
 		}
 	}
+	for _, param := range params {
+		if param.Name == properties.EmailParameterName {
+			c.Entry.Address = param.Value
+			break
+		}
+	}
 	return nil
 }
 
