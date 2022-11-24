@@ -88,7 +88,7 @@ type Event struct {
 	Attendees []*values.AttendeeContact `ical:"attendee,omitempty"`
 
 	// defines the categories for a calendar component.
-	Categories *values.CSV `ical:",omitempty"`
+	Categories []string `ical:",omitempty"`
 
 	// specifies non-processing information intended to provide a comment to the calendar user.
 	Comments []values.Comment `ical:",omitempty"`
