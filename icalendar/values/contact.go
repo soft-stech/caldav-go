@@ -24,6 +24,7 @@ var _ = log.Print
 type Contact struct {
 	Entry  mail.Address
 	Status string
+	Role   string
 }
 
 type AttendeeContact Contact
@@ -89,6 +90,12 @@ func (c *Contact) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
 		if param.Name == properties.EmailParameterName {
 			c.Entry.Address = param.Value
+			break
+		}
+	}
+	for _, param := range params {
+		if param.Name == properties.ParticipantRoleName {
+			c.Role = param.Value
 			break
 		}
 	}

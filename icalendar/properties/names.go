@@ -33,6 +33,7 @@ const (
 	ABLabel                                   = "X_ABLABEL"
 	ParticipationStatusName                   = "PARTSTAT"
 	EmailParameterName                        = "EMAIL"
+	ParticipantRoleName                       = "ROLE"
 )
 
 type Param struct {
