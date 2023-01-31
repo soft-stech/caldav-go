@@ -59,7 +59,10 @@ func (c *Contact) EncodeICalValue() (string, error) {
 // encodes the contact params for the iCalendar specification
 func (c *Contact) EncodeICalParams() (params properties.Params, err error) {
 	if c.Entry.Name != "" {
-		params = properties.Params{{properties.CanonicalNameParameterName, c.Entry.Name}}
+		params = properties.Params{
+			{Name: properties.CanonicalNameParameterName, Value: c.Entry.Name},
+			{Name: properties.ParticipantRoleName, Value: c.Role},
+		}
 	}
 	return
 }
