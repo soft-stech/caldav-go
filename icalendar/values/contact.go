@@ -62,6 +62,7 @@ func (c *Contact) EncodeICalParams() (params properties.Params, err error) {
 		params = properties.Params{
 			{Name: properties.CanonicalNameParameterName, Value: c.Entry.Name},
 			{Name: properties.ParticipantRoleName, Value: c.Role},
+			{Name: properties.ParticipationStatusName, Value: c.Status},
 		}
 	}
 	return
