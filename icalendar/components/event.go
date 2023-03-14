@@ -61,7 +61,7 @@ type Event struct {
 	// defines the revision sequence number of the calendar component within a sequence of revisions.
 	Sequence int `ical:",omitempty"`
 
-	// efines the overall status or confirmation for the calendar component.
+	// defines the overall status or confirmation for the calendar component.
 	Status values.EventStatus `ical:",omitempty"`
 
 	// defines a short summary or subject for the calendar component.
@@ -97,10 +97,10 @@ type Event struct {
 	ContactInfo *values.CSV `ical:"contact,omitempty"`
 
 	// defines the list of date/time exceptions for a recurring calendar component.
-	*values.ExceptionDateTimes `ical:",omitempty"`
+	values.ExceptionDateTimes `ical:"exdate,omitempty"`
 
 	// defines the list of date/times for a recurrence set.
-	*values.RecurrenceDateTimes `ical:",omitempty"`
+	RecurrenceDateTimes *values.RecurrenceDateTimes `ical:"rdate,omitempty"`
 
 	// used to represent a relationship or reference between one calendar component and another.
 	RelatedTo *values.Url `ical:"related-to,omitempty"`
@@ -148,10 +148,7 @@ func (e *Event) AddRecurrenceRules(r ...*values.RecurrenceRule) {
 
 // adds one or more recurrence rule exception to the event
 func (e *Event) AddRecurrenceExceptions(d ...*values.DateTime) {
-	if e.ExceptionDateTimes == nil {
-		e.ExceptionDateTimes = new(values.ExceptionDateTimes)
-	}
-	*e.ExceptionDateTimes = append(*e.ExceptionDateTimes, d...)
+	e.ExceptionDateTimes = append(e.ExceptionDateTimes, d...)
 }
 
 // checks to see if the event is a recurrence
