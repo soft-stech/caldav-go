@@ -49,7 +49,7 @@ func xmlToReadCloser(xmldata ...interface{}) (io.ReadCloser, int, error) {
 	}
 	if len(buffer) > 0 {
 		var encoded = strings.Join(buffer, "\n")
-		log.Printf("[WebDAV Request]\n%+v\n", encoded)
+		//log.Printf("[WebDAV Request]\n%+v\n", encoded)
 		return ioutil.NopCloser(bytes.NewBuffer([]byte(encoded))), len(encoded), nil
 	} else {
 		return nil, 0, nil

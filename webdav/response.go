@@ -32,7 +32,7 @@ func (r *Response) Features() (features []string) {
 // decodes a WebDAV XML response into the provided interface
 func (r *Response) Decode(into interface{}) error {
 	data, _ := ioutil.ReadAll(r.Body)
-	log.Printf("[WebDAV Response]\n%+v\n", string(data))
+	//log.Printf("[WebDAV Response]\n%+v\n", string(data))
 	if err := xml.Unmarshal(data, into); err != nil {
 		return utils.NewError(r.Decode, "unable to decode response body", r, err)
 	} else {

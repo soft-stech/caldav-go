@@ -1,7 +1,11 @@
 package http
 
 import (
+	"bytes"
+	"io"
+	"log"
 	"net/http"
+	"net/http/httputil"
 
 	"github.com/soft-stech/caldav-go/utils"
 )
@@ -36,12 +40,31 @@ func (c *Client) SetServer(s *Server) {
 
 // executes an HTTP request
 func (c *Client) Do(req *Request) (*Response, error) {
+	r := (*http.Request)(req)
+	if r.Body != nil {
+		buf := &bytes.Buffer{}
+		nRead, _ := io.Copy(buf, r.Body)
+		r.Body = io.NopCloser(buf)
+		r.ContentLength = nRead
+	}
 	for key, value := range c.requestHeaders {
 		req.Header.Add(key, value)
 	}
+	reqDump, err := httputil.DumpRequestOut((*http.Request)(req), true)
+
+	if err == nil {
+		log.Printf("[WebDAV REQUEST]\n%+v\n", string(reqDump))
+	}
 	if resp, err := c.Native().Do((*http.Request)(req)); err != nil {
+
 		return nil, utils.NewError(c.Do, "unable to execute HTTP request", c, err)
 	} else {
+		respDump, err := httputil.DumpResponse(resp, true)
+		if err != nil {
+			log.Printf("REQUEST LOGGER ERROR err %v", err)
+		} else {
+			log.Printf("[WebDAV RESPONSE]\n%+v\n", string(respDump))
+		}
 		return NewResponse(resp), nil
 	}
 }
