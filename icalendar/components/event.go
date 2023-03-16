@@ -97,10 +97,10 @@ type Event struct {
 	ContactInfo *values.CSV `ical:"contact,omitempty"`
 
 	// defines the list of date/time exceptions for a recurring calendar component.
-	values.ExceptionDateTimes `ical:"exdate,omitempty"`
+	ExceptionDateTimes []*values.ExceptionDateTime `ical:"exdate,omitempty"`
 
 	// defines the list of date/times for a recurrence set.
-	RecurrenceDateTimes *values.RecurrenceDateTimes `ical:"rdate,omitempty"`
+	RecurrenceDateTimes *values.RecurrenceDateTimes `ical:",omitempty"`
 
 	// used to represent a relationship or reference between one calendar component and another.
 	RelatedTo *values.Url `ical:"related-to,omitempty"`
@@ -147,7 +147,7 @@ func (e *Event) AddRecurrenceRules(r ...*values.RecurrenceRule) {
 }
 
 // adds one or more recurrence rule exception to the event
-func (e *Event) AddRecurrenceExceptions(d ...*values.DateTime) {
+func (e *Event) AddRecurrenceExceptions(d ...*values.ExceptionDateTime) {
 	e.ExceptionDateTimes = append(e.ExceptionDateTimes, d...)
 }
 
