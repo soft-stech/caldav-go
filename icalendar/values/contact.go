@@ -22,9 +22,11 @@ var _ = log.Print
 // parameters may also be specified on this property. If the LANGUAGE property parameter is specified, the identified
 // language applies to the CN parameter value.
 type Contact struct {
-	Entry  mail.Address
-	Status string
-	Role   string
+	Entry          mail.Address
+	Status         string
+	Role           string
+	RSVP           string
+	ScheduleStatus string
 }
 
 type AttendeeContact Contact
@@ -61,8 +63,6 @@ func (c *Contact) EncodeICalParams() (params properties.Params, err error) {
 	if c.Entry.Name != "" {
 		params = properties.Params{
 			{Name: properties.CanonicalNameParameterName, Value: c.Entry.Name},
-			{Name: properties.ParticipantRoleName, Value: c.Role},
-			{Name: properties.ParticipationStatusName, Value: c.Status},
 		}
 	}
 	return
@@ -100,6 +100,18 @@ func (c *Contact) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
 		if param.Name == properties.ParticipantRoleName {
 			c.Role = param.Value
+			break
+		}
+	}
+	for _, param := range params {
+		if param.Name == properties.RSVPName {
+			c.RSVP = param.Value
+			break
+		}
+	}
+	for _, param := range params {
+		if param.Name == properties.ScheduleStatusName {
+			c.ScheduleStatus = param.Value
 			break
 		}
 	}
@@ -148,7 +160,15 @@ func (c *AttendeeContact) EncodeICalValue() (string, error) {
 
 // encodes the contact params for the iCalendar specification
 func (c *AttendeeContact) EncodeICalParams() (params properties.Params, err error) {
-	return (*Contact)(c).EncodeICalParams()
+	(*Contact)(c).EncodeICalParams()
+	if c.Entry.Name != "" {
+		params = properties.Params{
+			{Name: properties.ParticipantRoleName, Value: c.Role},
+			{Name: properties.ParticipationStatusName, Value: c.Status},
+			{Name: properties.RSVPName, Value: c.RSVP},
+		}
+	}
+	return
 }
 
 // decodes the contact value from the iCalendar specification

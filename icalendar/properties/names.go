@@ -34,6 +34,8 @@ const (
 	ParticipationStatusName                   = "PARTSTAT"
 	EmailParameterName                        = "EMAIL"
 	ParticipantRoleName                       = "ROLE"
+	RSVPName                                  = "RSVP"
+	ScheduleStatusName                        = "SCHEDULE-STATUS"
 )
 
 type Param struct {
