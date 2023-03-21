@@ -229,6 +229,27 @@ func (c *Client) GetEvents(path string) ([]*components.Event, error) {
 
 // attempts to fetch an event on the remote CalDAV server
 func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*components.Event, oerr error) {
+	responses, oerr := c.Report(path, query)
+	if oerr == nil {
+		for i, r := range responses {
+			for j, p := range r.PropStats {
+				if p.Prop == nil || p.Prop.CalendarData == nil {
+					continue
+				} else if cal, err := p.Prop.CalendarData.CalendarComponent(); err != nil {
+					msg := fmt.Sprintf("unable to decode property %d of response %d", j, i)
+					oerr = utils.NewError(c.QueryEvents, msg, c, err)
+					return
+				} else {
+					events = append(events, cal.Events...)
+				}
+			}
+		}
+	}
+
+	return
+}
+
+func (c *Client) Report(path string, query *cent.CalendarQuery) (response []*cent.Response, oerr error) {
 	ms := new(cent.Multistatus)
 	if req, err := c.Server().WebDAV().NewRequest("REPORT", path, query); err != nil {
 		oerr = utils.NewError(c.QueryEvents, "unable to create request", c, err)
@@ -245,19 +266,7 @@ func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*
 		msg := "unable to decode response"
 		oerr = utils.NewError(c.QueryEvents, msg, c, err)
 	} else {
-		for i, r := range ms.Responses {
-			for j, p := range r.PropStats {
-				if p.Prop == nil || p.Prop.CalendarData == nil {
-					continue
-				} else if cal, err := p.Prop.CalendarData.CalendarComponent(); err != nil {
-					msg := fmt.Sprintf("unable to decode property %d of response %d", j, i)
-					oerr = utils.NewError(c.QueryEvents, msg, c, err)
-					return
-				} else {
-					events = append(events, cal.Events...)
-				}
-			}
-		}
+		response = ms.Responses
 	}
 	return
 }
