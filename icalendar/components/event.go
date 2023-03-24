@@ -112,6 +112,8 @@ type Event struct {
 	Color string `ical:",omitempty"`
 
 	TextColor string `ical:"x-fullcalendar-text-color,omitempty"`
+
+	Alarm []*Alarm `ical:",omitempty"`
 }
 
 // validates the event internals
@@ -149,6 +151,19 @@ func (e *Event) AddRecurrenceRules(r ...*values.RecurrenceRule) {
 // adds one or more recurrence rule exception to the event
 func (e *Event) AddRecurrenceExceptions(d ...*values.ExceptionDateTime) {
 	e.ExceptionDateTimes = append(e.ExceptionDateTimes, d...)
+}
+
+func (e *Event) AddAlarmBeforeStart(d time.Duration) {
+	newAlarm := &Alarm{}
+	newAlarm.Action = values.DisplayAlarmAction
+	newAlarm.Description = e.Summary
+
+	related := values.StartAlarmTriggerRelated
+	newAlarm.Trigger = &values.AlarmTrigger{
+		Related:  &related,
+		Relative: values.NewDuration(d),
+	}
+	e.Alarm = append(e.Alarm, newAlarm)
 }
 
 // checks to see if the event is a recurrence

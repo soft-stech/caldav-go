@@ -22,6 +22,7 @@ const (
 	ParameterType                                = "TYPE"
 	AddressBookServerMemberName                  = "X-ADDRESSBOOKSERVER-MEMBER"
 	CategoriesPropertyName                       = "CATEGORIES"
+	AlarmTriggerPropertyName                     = "TRIGGER"
 )
 
 type ParameterName string
@@ -37,6 +38,7 @@ const (
 	ParticipantRoleName                       = "ROLE"
 	RSVPName                                  = "RSVP"
 	ScheduleStatusName                        = "SCHEDULE-STATUS"
+	RelatedPropertyName                       = "RELATED"
 )
 
 type Param struct {
