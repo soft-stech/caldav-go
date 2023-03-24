@@ -21,6 +21,7 @@ const (
 	OrganizationPropertyName                     = "ORG"
 	ParameterType                                = "TYPE"
 	AddressBookServerMemberName                  = "X-ADDRESSBOOKSERVER-MEMBER"
+	CategoriesPropertyName                       = "CATEGORIES"
 )
 
 type ParameterName string
