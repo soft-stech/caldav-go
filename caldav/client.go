@@ -272,7 +272,7 @@ func (c *Client) Report(path string, query *cent.CalendarQuery) (response []*cen
 }
 
 // attempts to fetch an event on the remote CalDAV server
-func (c *Client) QueryFreeBusy(start time.Time, end time.Time, emails []string) (calendars []*components.Calendar, oerr error) {
+func (c *Client) QueryFreeBusy(path string, start time.Time, end time.Time, organizerEmail string, emails []string) (calendars []*components.Calendar, oerr error) {
 	cal := new(components.Calendar)
 
 	cal.Method = "REQUEST"
@@ -281,18 +281,15 @@ func (c *Client) QueryFreeBusy(start time.Time, end time.Time, emails []string) 
 
 	var attendees []*values.AttendeeContact
 	for _, e := range emails {
-		a := values.NewAttendeeContact("Placeholder", e)
+		a := values.NewAttendeeContact("Placheholder", e)
+		a.Role = "CHAIR"
+		a.Status = "NEEDS-ACTION"
+		a.RSVP = "FALSE"
 		attendees = append(attendees, a)
 	}
 	freeBusy.Attendees = attendees
-	freeBusy.Organizer = values.NewOrganizerContact("Admin", "admin@example.com")
+	freeBusy.Organizer = values.NewOrganizerContact("Placeholder", organizerEmail)
 	cal.FreeBusy = freeBusy
-
-	path := "/caldav.php/admin/calendar"
-
-	// Split out request for debugging purposes (can be run through POSTMAN):
-	//rr, _ := c.Server().NewRequest("POST", path, cal)
-	//fmt.Printf("rr: %+v\r\n", rr)
 
 	schedResponse := new(cent.ScheduleResponse)
 

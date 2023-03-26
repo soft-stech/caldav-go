@@ -39,6 +39,7 @@ const (
 	RSVPName                                  = "RSVP"
 	ScheduleStatusName                        = "SCHEDULE-STATUS"
 	RelatedPropertyName                       = "RELATED"
+	FreeBusyTypeParameterName                 = "FBTYPE"
 )
 
 type Param struct {
