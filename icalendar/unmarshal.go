@@ -104,21 +104,21 @@ func hydrateInterface(v reflect.Value, prop *properties.Property) (bool, error) 
 	var i = v.Interface()
 	var hasValue = false
 
-	// decode any params, if supported
-	if len(prop.Params) > 0 {
-		if decoder, ok := i.(properties.CanDecodeParams); ok {
-			if err := decoder.DecodeICalParams(prop.Params); err != nil {
-				return false, utils.NewError(hydrateInterface, "error decoding property parameters", v, err)
-			}
-		}
-	}
-
 	// decode a value if possible
 	if decoder, ok := i.(properties.CanDecodeValue); ok {
 		if err := decoder.DecodeICalValue(prop.Value); err != nil {
 			return false, utils.NewError(hydrateInterface, "error decoding property value", v, err)
 		} else {
 			hasValue = true
+		}
+	}
+
+	// decode any params, if supported
+	if len(prop.Params) > 0 {
+		if decoder, ok := i.(properties.CanDecodeParams); ok {
+			if err := decoder.DecodeICalParams(prop.Params); err != nil {
+				return false, utils.NewError(hydrateInterface, "error decoding property parameters", v, err)
+			}
 		}
 	}
 
@@ -173,11 +173,6 @@ func hydrateLiteral(v reflect.Value, prop *properties.Property) (reflect.Value, 
 }
 
 func hydrateProperty(v reflect.Value, prop *properties.Property) error {
-
-	if prop.Name == "EXDATE" {
-		log.Print("OK")
-
-	}
 	// check to see if the interface handles it's own hydration
 	if handled, err := hydrateInterface(v, prop); err != nil {
 		return utils.NewError(hydrateProperty, "unable to hydrate interface", v, err)

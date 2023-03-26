@@ -3,6 +3,7 @@ package values
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/soft-stech/caldav-go/icalendar/properties"
 	"github.com/soft-stech/caldav-go/utils"
@@ -60,20 +61,20 @@ func (t *AlarmTrigger) EncodeICalParams() (params properties.Params, err error) 
 }
 
 func (t *AlarmTrigger) DecodeICalValue(value string) error {
-	if t.Value != nil {
-		a := &DateTime{}
-		if err := a.DecodeICalValue(value); err != nil {
-			msg := fmt.Sprintf("unable to decode %s value", value)
-			return utils.NewError(t.DecodeICalValue, msg, t, err)
-		}
-		t.Absolute = a
-	} else if t.Related != nil {
+	if strings.Contains(value, "P") {
 		d := &Duration{}
 		if err := d.DecodeICalValue(value); err != nil {
 			msg := fmt.Sprintf("unable to decode %s value", value)
 			return utils.NewError(t.DecodeICalValue, msg, t, err)
 		}
 		t.Relative = d
+	} else {
+		a := &DateTime{}
+		if err := a.DecodeICalValue(value); err != nil {
+			msg := fmt.Sprintf("unable to decode %s value", value)
+			return utils.NewError(t.DecodeICalValue, msg, t, err)
+		}
+		t.Absolute = a
 	}
 	return nil
 }

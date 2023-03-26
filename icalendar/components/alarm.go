@@ -27,11 +27,3 @@ func (a *Alarm) ValidateICalValue() error {
 	return nil
 
 }
-
-//BEGIN:VALARM
-//X-EVOLUTION-ALARM-UID:ba5ff56ffa90b9dd546c7d632172a91a8a783eb5
-//ACTION:DISPLAY
-//DESCRIPTION:AAAA
-//TRIGGER;RELATED=START:-PT15M
-//END:VALARM
-//
