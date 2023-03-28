@@ -307,6 +307,9 @@ func (c *Client) QueryFreeBusy(path string, start time.Time, end time.Time, orga
 		return nil, utils.NewError(c.QueryEvents, msg, c, err)
 	} else {
 		for _, r := range schedResponse.Responses {
+			if r.CalendarData == nil {
+				continue
+			}
 			if cal, err := r.CalendarData.CalendarComponent(); err != nil {
 				return nil, fmt.Errorf("unable to get calendar component: %v", err)
 			} else {
