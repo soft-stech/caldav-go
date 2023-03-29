@@ -130,6 +130,24 @@ func (c *Client) Bind(path string, depth Depth, bind *entities.Bind) error {
 	return nil
 }
 
+func (c *Client) Proppatch(path string, pu *entities.Propertyupdate) (*entities.Multistatus, error) {
+	ms := new(entities.Multistatus)
+
+	if req, err := c.Server().NewRequest("PROPPATCH", path, pu); err != nil {
+		return nil, utils.NewError(c.Proppatch, "unable to create request", c, err)
+	} else if resp, err := c.Do(req); err != nil {
+		return nil, utils.NewError(c.Proppatch, "unable to execute request", c, err)
+	} else if resp.StatusCode != StatusMulti {
+		msg := fmt.Sprintf("unexpected status: %s", resp.Status)
+		return nil, utils.NewError(c.Proppatch, msg, c, nil)
+	} else if err := resp.Decode(ms); err != nil {
+		return nil, utils.NewError(c.Proppatch, "unable to decode response", c, err)
+	}
+
+	return ms, nil
+
+}
+
 // creates a new client for communicating with an WebDAV server
 func NewClient(server *Server, native *nhttp.Client) *Client {
 	return (*Client)(http.NewClient((*http.Server)(server), native))

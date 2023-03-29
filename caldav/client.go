@@ -252,19 +252,19 @@ func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*
 func (c *Client) Report(path string, query *cent.CalendarQuery) (response []*cent.Response, oerr error) {
 	ms := new(cent.Multistatus)
 	if req, err := c.Server().WebDAV().NewRequest("REPORT", path, query); err != nil {
-		oerr = utils.NewError(c.QueryEvents, "unable to create request", c, err)
+		oerr = utils.NewError(c.Report, "unable to create request", c, err)
 	} else if resp, err := c.WebDAV().Do(req); err != nil {
-		oerr = utils.NewError(c.QueryEvents, "unable to execute request", c, err)
+		oerr = utils.NewError(c.Report, "unable to execute request", c, err)
 	} else if resp.StatusCode == http.StatusNotFound {
 		return // no events if not found
 	} else if resp.StatusCode != webdav.StatusMulti {
 		err := new(entities.Error)
 		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
 		resp.Decode(err)
-		oerr = utils.NewError(c.QueryEvents, msg, c, err)
+		oerr = utils.NewError(c.Report, msg, c, err)
 	} else if err := resp.Decode(ms); err != nil {
 		msg := "unable to decode response"
-		oerr = utils.NewError(c.QueryEvents, msg, c, err)
+		oerr = utils.NewError(c.Report, msg, c, err)
 	} else {
 		response = ms.Responses
 	}
