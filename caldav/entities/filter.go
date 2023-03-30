@@ -19,8 +19,8 @@ type ComponentFilter struct {
 	Name            values.ComponentName `xml:"name,attr"`
 	ComponentFilter *ComponentFilter     `xml:",omitempty"`
 	TimeRange       *TimeRange           `xml:",omitempty"`
-	PropertyFilter  *PropertyFilter      `xml:",omitempty"`
-	ParameterFilter *ParameterFilter     `xml:",omitempty"`
+	PropertyFilter  []*PropertyFilter    `xml:",omitempty"`
+	ParameterFilter []*ParameterFilter   `xml:",omitempty"`
 }
 
 // used to restrict component filters to a particular time range
@@ -49,7 +49,7 @@ type ParameterFilter struct {
 type TextMatch struct {
 	XMLName         xml.Name             `xml:"urn:ietf:params:xml:ns:caldav text-match"`
 	Collation       values.TextCollation `xml:"collation,attr,omitempty"`
-	NegateCondition values.HumanBoolean  `xml:"attr,negate-condition,omitempty"`
+	NegateCondition values.HumanBoolean  `xml:"negate-condition,attr,omitempty"`
 	Content         string               `xml:",innerxml"`
 }
 
