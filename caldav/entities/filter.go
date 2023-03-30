@@ -26,8 +26,8 @@ type ComponentFilter struct {
 // used to restrict component filters to a particular time range
 type TimeRange struct {
 	XMLName   xml.Name         `xml:"urn:ietf:params:xml:ns:caldav time-range"`
-	StartTime *values.DateTime `xml:"start,attr"`
-	EndTime   *values.DateTime `xml:"end,attr"`
+	StartTime *values.DateTime `xml:"start,attr,omitempty"`
+	EndTime   *values.DateTime `xml:"end,attr,omitempty"`
 }
 
 // used to restrict component filters to a property value
