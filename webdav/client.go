@@ -148,6 +148,27 @@ func (c *Client) Proppatch(path string, pu *entities.Propertyupdate) (*entities.
 
 }
 
+func (c *Client) Report(path string, depth Depth, r interface{}) (*entities.Multistatus, error) {
+
+	ms := new(entities.Multistatus)
+
+	if req, err := c.Server().NewRequest("REPORT", path, r); err != nil {
+		return nil, utils.NewError(c.Report, "unable to create request", c, err)
+	} else if req.Http().Native().Header.Set("Depth", string(depth)); depth == "" {
+		return nil, utils.NewError(c.Report, "search depth must be defined", c, nil)
+	} else if resp, err := c.Do(req); err != nil {
+		return nil, utils.NewError(c.Report, "unable to execute request", c, err)
+	} else if resp.StatusCode != StatusMulti {
+		msg := fmt.Sprintf("unexpected status: %s", resp.Status)
+		return nil, utils.NewError(c.Report, msg, c, nil)
+	} else if err := resp.Decode(ms); err != nil {
+		return nil, utils.NewError(c.Report, "unable to decode response", c, err)
+	}
+
+	return ms, nil
+
+}
+
 // creates a new client for communicating with an WebDAV server
 func NewClient(server *Server, native *nhttp.Client) *Client {
 	return (*Client)(http.NewClient((*http.Server)(server), native))

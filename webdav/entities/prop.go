@@ -16,9 +16,10 @@ type Prop struct {
 	ParentSet                     *ParentSet                     `xml:",omitempty"`
 	CurrentUserPrincipal          *Principal                     `xml:"current-user-principal,omitempty"`
 	CTag                          string                         `xml:"http://calendarserver.org/ns/ getctag,omitempty"`
-	ETag                          string                         `xml:"http://calendarserver.org/ns/ getetag,omitempty"`
+	ETag                          string                         `xml:"getetag,omitempty"`
 	SupportedCalendarComponentSet *SupportedCalendarComponentSet `xml:",omitempty"`
 	CreationDate                  *time.Time                     `xml:"creationdate,omitempty"`
+	SyncToken                     string                         `xml:"sync-token,omitempty"`
 }
 
 // the type of a resource
