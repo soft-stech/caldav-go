@@ -228,8 +228,8 @@ func (c *Client) GetEvents(path string) ([]*components.Event, error) {
 }
 
 // attempts to fetch an event on the remote CalDAV server
-func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*components.Event, oerr error) {
-	responses, oerr := c.Report(path, query)
+func (c *Client) QueryEvents(path string, depth webdav.Depth, query *cent.CalendarQuery) (events []*components.Event, oerr error) {
+	responses, oerr := c.Report(path, depth, query)
 	if oerr == nil {
 		for i, r := range responses {
 			for j, p := range r.PropStats {
@@ -249,10 +249,12 @@ func (c *Client) QueryEvents(path string, query *cent.CalendarQuery) (events []*
 	return
 }
 
-func (c *Client) Report(path string, query *cent.CalendarQuery) (response []*cent.Response, oerr error) {
+func (c *Client) Report(path string, depth webdav.Depth, query *cent.CalendarQuery) (response []*cent.Response, oerr error) {
 	ms := new(cent.Multistatus)
 	if req, err := c.Server().WebDAV().NewRequest("REPORT", path, query); err != nil {
 		oerr = utils.NewError(c.Report, "unable to create request", c, err)
+	} else if req.Http().Native().Header.Set("Depth", string(depth)); depth == "" {
+		return nil, utils.NewError(c.Report, "search depth must be defined", c, nil)
 	} else if resp, err := c.WebDAV().Do(req); err != nil {
 		oerr = utils.NewError(c.Report, "unable to execute request", c, err)
 	} else if resp.StatusCode == http.StatusNotFound {
