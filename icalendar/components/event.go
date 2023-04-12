@@ -82,7 +82,7 @@ type Event struct {
 	RecurrenceRules []*values.RecurrenceRule `ical:"rrule,omitempty"`
 
 	// property provides the capability to associate a document object with a calendar component.
-	Attachment *values.Url `ical:"attach,omitempty"`
+	Attachment []*values.Attachment `ical:"attach,omitempty"`
 
 	// defines an "Attendee" within a calendar component.
 	Attendees []*values.AttendeeContact `ical:"attendee,omitempty"`

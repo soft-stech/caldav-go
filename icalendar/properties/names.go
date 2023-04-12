@@ -23,6 +23,7 @@ const (
 	AddressBookServerMemberName                  = "X-ADDRESSBOOKSERVER-MEMBER"
 	CategoriesPropertyName                       = "CATEGORIES"
 	AlarmTriggerPropertyName                     = "TRIGGER"
+	AttachmentPropertyName                       = "ATTACH"
 )
 
 type ParameterName string
@@ -40,6 +41,10 @@ const (
 	ScheduleStatusName                        = "SCHEDULE-STATUS"
 	RelatedPropertyName                       = "RELATED"
 	FreeBusyTypeParameterName                 = "FBTYPE"
+	EncodingPropertyName                      = "ENCODING"
+	FmtTypePropertyName                       = "FMTTYPE"
+	SizePropertyName                          = "SIZE"
+	FilenamePropertyName                      = "FILENAME"
 )
 
 type Param struct {
