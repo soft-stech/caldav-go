@@ -93,7 +93,7 @@ func (a *Attachment) DecodeICalParams(params properties.Params) error {
 	for _, param := range params {
 		if param.Name == properties.ValuePropertyName {
 			if param.Value == AttachmentValueType_Binary {
-				a.BinaryAttachment = &BinaryAttachment{Value: a.rawValue}
+				a.BinaryAttachment = &BinaryAttachment{Value: a.rawValue, ValueType: AttachmentValueType_Binary}
 			}
 			break
 		}
