@@ -169,6 +169,24 @@ func (c *Client) Report(path string, depth Depth, r interface{}) (*entities.Mult
 
 }
 
+// moves a resource
+func (c *Client) Move(path, destination string) error {
+	if req, err := c.Server().NewRequest("MOVE", path); err != nil {
+		return utils.NewError(c.Move, "unable to create request", c, err)
+	} else if req.Http().Native().Header.Set("Destination", string(destination)); destination == "" {
+		return utils.NewError(c.Move, "destination must be defined", c, nil)
+	} else if resp, err := c.Do(req); err != nil {
+		return utils.NewError(c.Move, "unable to execute request", c, err)
+	} else if resp.StatusCode != nhttp.StatusCreated {
+		err := new(entities.Error)
+		resp.Decode(err)
+		msg := fmt.Sprintf("unexpected server response %s", resp.Status)
+		return utils.NewError(c.Move, msg, c, err)
+	} else {
+		return nil
+	}
+}
+
 // creates a new client for communicating with an WebDAV server
 func NewClient(server *Server, native *nhttp.Client) *Client {
 	return (*Client)(http.NewClient((*http.Server)(server), native))
